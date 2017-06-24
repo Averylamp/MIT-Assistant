@@ -15,11 +15,13 @@ import json
 
 def lookupClass(req):
     speech =  "Lookup  class"
+    context = req.get("contexts", {})
+
     return {
         "speech": speech,
         "displayText": speech,
         # "data": data,
-        # "contextOut": [],
+        "contextOut": [context],
         "source": "apiai-weather-webhook-sample"
     }
 
