@@ -20,6 +20,7 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
+
 @app.route('/', methods=['GET'])
 def loadingPage():
 	return "Hello loading page"
@@ -33,10 +34,10 @@ def webhook():
 	# print(json.dumps(req, indent=4))
 
 	res = processRequest(req)
-
-	res = json.dumps(res, indent=4)
 	print("Response: ")
 	print(res)
+	res = json.dumps(res, indent=4)
+	
 	r = make_response(res)
 	r.headers['Content-Type'] = 'application/json'
 	return r
@@ -45,7 +46,7 @@ def webhook():
 def processRequest(req):
 	if req.get("result").get("action") == "LookUpClass":
 		print("Class Lookup Detected")
-		return lookupClass(req)
+		return MITClass.lookupClass(req)
 	if req.get("result").get("action") == "LookUpPeople":
 		print("People Lookup Detected")
 		return lookupClass(req)
