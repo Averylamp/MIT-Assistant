@@ -15,14 +15,21 @@ import json
 
 def lookupClass(req):
     speech =  "Lookup  class"
-    context = req.get("result").get("contexts", {})
+    context = []
+    parameters = req.get("result").get("parameters")
+    if parameters.get("number") != "":
+        print("Class number found {}".format(parameters.get("number")))
+        classNumber = parameters.get("number")
+        numberContext = {"name":"Class-number-found", "lifespan":7, "parameters":{"number":classNumber}}
+        context.append(numberContext)
+
     print(req.get("result").keys())
     print("Context - {}".format(context))
     return {
         "speech": speech,
         "displayText": speech,
         # "data": data,
-        "contextOut": [context],
+        "contextOut": context,
         "source": "apiai-weather-webhook-sample"
     }
 
