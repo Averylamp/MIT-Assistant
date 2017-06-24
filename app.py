@@ -29,13 +29,14 @@ def loadingPage():
 def webhook():
 	req = request.get_json(silent=True, force=True)
 
-	print("Request:")
-	print(json.dumps(req, indent=4))
+	print("Request Recieved:")
+	# print(json.dumps(req, indent=4))
 
 	res = processRequest(req)
 
 	res = json.dumps(res, indent=4)
-	# print(res)
+	print("Response: ")
+	print(res)
 	r = make_response(res)
 	r.headers['Content-Type'] = 'application/json'
 	return r
@@ -43,10 +44,13 @@ def webhook():
 
 def processRequest(req):
 	if req.get("result").get("action") == "LookUpClass":
+		print("Class Lookup Detected")
 		return lookupClass(req)
 	if req.get("result").get("action") == "LookUpPeople":
+		print("People Lookup Detected")
 		return lookupClass(req)
 	if req.get("result").get("action") == "LookUpDining":
+		print("Dining Lookup Detected")
 		return lookupClass(req)
 	if req.get("result").get("action") != "yahooWeatherForecast":
 		return {}
