@@ -11,17 +11,25 @@ from __future__ import print_function
 import requests
 import json
 
+def addContext(context, new_context):
+    replaced = False
+    for i in range(len(context)):
+        if context[i]["name"] == new_context["name"]:
+            context[i] = new_context
+            replaced = True
+    if not replaced:
+        context.append(new_context)
 
 
 def lookupClass(req):
     speech =  "Lookup  class"
-    context = []
+    context = req.get("result").get("contexts")
     parameters = req.get("result").get("parameters")
     if parameters.get("number") != "":
         print("Class number found {}".format(parameters.get("number")))
         classNumber = parameters.get("number")
         numberContext = {"name":"Class-number-found", "lifespan":7, "parameters":{"number":classNumber}}
-        context.append(numberContext)
+        addContext(context, numberContext)
 
     print(req.get("result").keys())
     print("Context - {}".format(context))
