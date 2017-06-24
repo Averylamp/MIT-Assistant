@@ -15,8 +15,9 @@ import json
 
 def lookupClass(req):
     speech =  "Lookup  class"
-    context = req.get("contexts", {})
-
+    context = req.get("result").get("contexts", {})
+    print(req.get("result").keys())
+    print("Context - {}".format(context))
     return {
         "speech": speech,
         "displayText": speech,
