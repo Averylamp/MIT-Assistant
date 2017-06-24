@@ -13,7 +13,7 @@ import json
 
 
 
-def lookupClass(req):-
+def lookupClass(req):
     speech =  "Lookup  class"
     return {
         "speech": speech,
