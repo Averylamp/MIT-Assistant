@@ -28,7 +28,7 @@ def lookupClass(req):
     if parameters.get("number") != "":
         print("Class number found {}".format(parameters.get("number")))
         classNumber = parameters.get("number")
-        numberContext = {"name":"Class-number-found", "lifespan":7, "parameters":{"number":classNumber}}
+        # numberContext = {"name":"class-number-found", "lifespan":7, "parameters":{"number":classNumber}}
         addContext(context, numberContext)
 
     print(req.get("result").keys())
