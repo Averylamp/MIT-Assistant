@@ -24,12 +24,13 @@ def addContext(context, new_context):
 def lookupClass(req):
     speech =  "Lookup  class"
     context = req.get("result").get("contexts")
+    
     parameters = req.get("result").get("parameters")
     if parameters.get("number") != "":
         print("Class number found {}".format(parameters.get("number")))
         classNumber = parameters.get("number")
         # numberContext = {"name":"class-number-found", "lifespan":7, "parameters":{"number":classNumber}}
-        addContext(context, numberContext)
+        # addContext(context, numberContext)
 
     print(req.get("result").keys())
     print("Context - {}".format(context))
