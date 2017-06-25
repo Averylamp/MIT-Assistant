@@ -38,7 +38,7 @@ def lookupClass(req):
         "speech": speech,
         "displayText": speech,
         # "data": data,
-        "contextOut": [],
+        "contextOut": context,
         "source": "apiai-weather-webhook-sample"
     }
 
