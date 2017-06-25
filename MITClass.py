@@ -24,7 +24,7 @@ def addContext(context, new_context):
 def lookupClass(req):
     speech =  "Lookup  class"
     context = req.get("result").get("contexts")
-    
+
     parameters = req.get("result").get("parameters")
     if parameters.get("number") != "":
         print("Class number found {}".format(parameters.get("number")))
@@ -33,12 +33,12 @@ def lookupClass(req):
         # addContext(context, numberContext)
 
     print(req.get("result").keys())
-    print("Context - {}".format(context))
+    print(" Recieved Context - {}".format(context))
     return {
         "speech": speech,
         "displayText": speech,
         # "data": data,
-        "contextOut": context,
+        "contextOut": [],
         "source": "apiai-weather-webhook-sample"
     }
 
