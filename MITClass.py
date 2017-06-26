@@ -25,6 +25,10 @@ def getClassInfo(classnum):
     r = requests.get("https://mit-public.cloudhub.io/coursecatalog/v2/terms/{}/subjects/{}".format(currentTerm, classnum), headers = headers)
     return r
 
+def validateResponse(response):
+    if 'errorDesc' in response or 'StackTrace' in response:
+        return True
+    return False
 
 def lookupClass(req):
     speech =  "Lookup  class"
@@ -109,10 +113,6 @@ def lookupClass(req):
         "source": "webhook"
     }
 
-def validateResponse(response):
-    if 'errorDesc' in response or 'StackTrace' in response:
-        return True
-    return False
 
 def getSubjTitle(classnum):
     r = getClassInfo(classnum)
