@@ -57,34 +57,33 @@ def lookupClass(req):
                 if q != "Not Found":
                     speech = "{} is taught by {}.".format(classNumber, q)
                 else:
-                    speech = "{} could not be found.  Try searching for another class."
+                    speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Title":
                 q = getSubjTitle(classNumber)
                 if q != "Not Found":
                     speech = "{} is {}.".format(classNumber, q)
                 else:
-                    speech = "{} could not be found.  Try searching for another class."
+                    speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Description":
                 q = getDescp(classNumber)
                 if q != "Not Found":
                     speech = "The long description of {} is {}.".format(classNumber, q)
                 else:
-                    speech = "{} could not be found.  Try searching for another class."
+                    speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Units":
                 q = getUnits(classNumber)
                 if q != "Not Found":
                     speech = "{} is {} units.".format(classNumber, q)
                 else:
-                    speech = "{} could not be found.  Try searching for another class."
+                    speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Room":
                 q = getRoomNumber(classNumber)
                 if q != "Not Found":
                     speech = "{} is located in {}.".format(classNumber, q)
                 else:
-                    speech = "{} could not be found.  Try searching for another class."
+                    speech = "{} could not be found.  Try searching for another class.".format(classNumber)
         else:
-            parameters = {'getClass': '1', 'subjectId': classNumber, 'year' : '2017'}
-            r = requests.post("https://courseroad.mit.edu/ajax.php", data = parameters)
+            r = getClassInfo(classNumber)
             if validateResponse(r.json()):
                 speech = "{} could not be found as a class.  You can find the name, instructors, longer description, or number of units for a different class.  Just ask away!".format(classNumber)
             else:
