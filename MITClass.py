@@ -55,15 +55,17 @@ def lookupClass(req):
 
     classInfoFound = False
     classInfoType  = ""
+    if classContextFound and classContext.get("parameters", {}).get("ClassInfoTypes", "") != "":
+        classInfoType = classContext.get("parameters", {}).get("ClassInfoTypes", "")
+        classInfoFound = True
     if parameters.get("ClassInfoTypes", "") != "":
         classInfoType = parameters.get("ClassInfoTypes")
         classInfoFound = True
-    if classContextFound and classContext.get("parameters", {}).get("ClassInfoTypes", "") != "":
-        classInfoType = classContext.get("parameters", {}).get("ClassInfoTypes", "") != ""
-        classInfoFound = True
+    
     if classNumberFound:
         print("Class number found {}".format(classNumber))
         if classInfoFound:
+            print("Class Info Found {}".format(classInfoType))
             if classInfoType == "Instructor":
                 q = getInstructor(classNumber)
                 if q != "Not Found":
@@ -106,8 +108,6 @@ def lookupClass(req):
         else:
             speech = "You can find the name, instructors, longer description, or number of units of a class.  Just ask away!"
 
-    print(req.get("result").keys())
-    print(" Recieved Context - {}".format(context))
     return {
         "speech": speech,
         "displayText": speech,
