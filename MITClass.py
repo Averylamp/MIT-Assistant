@@ -12,15 +12,6 @@ import requests
 import json
 import datetime
 
-def addContext(context, new_context):
-    replaced = False
-    for i in range(len(context)):
-        if context[i]["name"] == new_context["name"]:
-            context[i] = new_context
-            replaced = True
-    if not replaced:
-        context.append(new_context)
-
 def lookupClass(req):
     speech =  "Lookup  class"
     contexts = req.get("result").get("contexts")
@@ -101,7 +92,7 @@ def lookupClass(req):
         "displayText": speech,
         # "data": data,
         "contextOut": contexts,
-        "source": "apiai-weather-webhook-sample"
+        "source": "webhook"
     }
 
 def validateResponse(response):
@@ -110,6 +101,7 @@ def validateResponse(response):
     return False
 
 def getClassInfo(classnum):
+    print("Finding class - {}".format(classnum))
     headers = {'client_id': '89bf245efe1f4d54b5176ce68ff5da83', 'client_secret': "fd0ff77789534319B29FE6EE400291F2"}
     now = datetime.datetime.now()
     currentTerm = "{}".format(now.year)

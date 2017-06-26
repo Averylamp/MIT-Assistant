@@ -35,7 +35,7 @@ def webhook():
 
 	res = processRequest(req)
 	print("Response: ")
-	print(res)
+	print(res["speech"])
 	res = json.dumps(res, indent=4)
 	
 	r = make_response(res)
@@ -56,17 +56,14 @@ def processRequest(req):
 	if req.get("result").get("action") == "LookUpDining":
 		print("Dining Lookup Detected")
 		return lookupClass(req)
-	if req.get("result").get("action") != "yahooWeatherForecast":
-		return {}
-	baseurl = "https://query.yahooapis.com/v1/public/yql?"
-	yql_query = makeYqlQuery(req)
-	if yql_query is None:
-		return {}
-	yql_url = baseurl + urlencode({'q': yql_query}) + "&format=json"
-	result = urlopen(yql_url).read()
-	data = json.loads(result)
-	res = makeWebhookResult(data)
-	return res
+	
+	return {
+        "speech": "Unable to proccess the request.  Try again later please.",
+        "displayText": "Unable to proccess the request.  Try again later please.",
+        # "data": data,
+        "contextOut": [],
+        "source": "webhook"
+    }
 
 
 def makeYqlQuery(req):
