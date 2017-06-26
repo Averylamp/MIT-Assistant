@@ -12,6 +12,20 @@ import requests
 import json
 import datetime
 
+
+def getClassInfo(classnum):
+    print("Finding class - {}".format(classnum))
+    headers = {'client_id': '89bf245efe1f4d54b5176ce68ff5da83', 'client_secret': "fd0ff77789534319B29FE6EE400291F2"}
+    now = datetime.datetime.now()
+    currentTerm = "{}".format(now.year)
+    if now.month >= 8:
+        currentTerm += "FA"
+    else:
+        currentTerm += "SP"
+    r = requests.get("https://mit-public.cloudhub.io/coursecatalog/v2/terms/{}/subjects/{}".format(currentTerm, classnum), headers = headers)
+    return r
+
+
 def lookupClass(req):
     speech =  "Lookup  class"
     contexts = req.get("result").get("contexts")
@@ -99,18 +113,6 @@ def validateResponse(response):
     if 'errorDesc' in response or 'StackTrace' in response:
         return True
     return False
-
-def getClassInfo(classnum):
-    print("Finding class - {}".format(classnum))
-    headers = {'client_id': '89bf245efe1f4d54b5176ce68ff5da83', 'client_secret': "fd0ff77789534319B29FE6EE400291F2"}
-    now = datetime.datetime.now()
-    currentTerm = "{}".format(now.year)
-    if now.month >= 8:
-        currentTerm += "FA"
-    else:
-        currentTerm += "SP"
-    r = requests.get("https://mit-public.cloudhub.io/coursecatalog/v2/terms/{}/subjects/{}".format(currentTerm, classnum), headers = headers)
-    return r
 
 def getSubjTitle(classnum):
     r = getClassInfo(classnum)
