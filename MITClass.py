@@ -136,6 +136,16 @@ def getInstructor(classnum):
     if validateResponse(r.json()):
         return 'Not Found'
     instructors = r.json()['item']['instructors']
+    if "<br>" in instructors:
+        twoPart = instructors.split("<br>")
+        fall = twoPart[0]
+        spring = twoPart[1]
+        if "Fall: " in fall:
+            fall = fall[fall.index("Fall: ") + 5:]
+        if "Spring: " in spring:
+            spring = spring[spring.index("Spring: ") + 8:]
+        instructors = "{} in the fall.  {} in the spring".format(fall, spring)
+
     return instructors
 
 def getUnits(classnum):
