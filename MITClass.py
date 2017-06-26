@@ -41,18 +41,21 @@ def lookupClass(req):
         if context.get("name", "") == "class-number-found" and context.get("parameters", {}).get("number", "") != "":
             classContext = context
             classNumber = context.get("parameters", {}).get("number", "")
+            print("Context classnumber found {}".format(classNumber))
             classContextFound = True
             classNumberFound = True
-    if parameters.get("number") != "":
+    if parameters.get("number", "") != "":
         classNumber = parameters.get("number")
         classNumberFound = True
-    if parameters.get("newnumber") != "":
+        print("Parameter Number classnumber found {}".format(classNumber))
+    if parameters.get("newnumber", "") != "":
         classNumber = parameters.get("newnumber")
         classNumberFound = True
+        print("Parameter NewNumber classnumber found {}".format(classNumber))
 
     classInfoFound = False
     classInfoType  = ""
-    if parameters.get("ClassInfoTypes") != "":
+    if parameters.get("ClassInfoTypes", "") != "":
         classInfoType = parameters.get("ClassInfoTypes")
         classInfoFound = True
     if classContextFound and classContext.get("parameters", {}).get("ClassInfoTypes", "") != "":
