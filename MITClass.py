@@ -147,7 +147,7 @@ def getUnits(classnum):
     a = unitDistribution.split("-")
     if " " in a[-1]:
         a[-1] = a[-1][:a[-1].index(" ")]
-    print(a)
+    print(a) 
     try:
         for i in a:
             units += int(i)
