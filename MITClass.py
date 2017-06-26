@@ -135,16 +135,16 @@ def getInstructor(classnum):
     r = getClassInfo(classnum)
     if validateResponse(r.json()):
         return 'Not Found'
-    instructors = r.json()['item']['instrucotrs']
+    instructors = r.json()['item']['instructors']
     return instructors
 
 def getUnits(classnum):
     r = getClassInfo(classnum)
     if validateResponse(r.json()):
         return 'Not Found'
-    unitDistribution = r.json()['item']['instrucotrs']
+    unitDistribution = r.json()['item']['units']
     units = 0
-    a = instructor.split("-")
+    a = unitDistribution.split("-")
     for i in a:
         units += int(i)
     return units
