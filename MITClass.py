@@ -10,6 +10,7 @@ http://amzn.to/1LGWsLG
 from __future__ import print_function
 import requests
 import json
+import datetime
 
 def addContext(context, new_context):
     replaced = False
@@ -49,10 +50,10 @@ def lookupClass(req):
         classInfoType = classContext.get("parameters", {}).get("ClassInfoTypes", "") != ""
         classInfoFound = True
     if classNumberFound:
-        print("Class number found {}".format(parameters.get("number")))
+        print("Class number found {}".format(classNumber))
         if classInfoFound:
             if classInfoType == "Instructor":
-                q = getFallInst(classNumber)
+                q = getInstructor(classNumber)
                 if q != "Not Found":
                     speech = "{} is taught by {}.".format(classNumber, q)
                 else:
@@ -82,7 +83,12 @@ def lookupClass(req):
                 else:
                     speech = "{} could not be found.  Try searching for another class."
         else:
-            speech = "You can find the name, instructors, longer description, or number of units of a class.  Just ask away!"
+            parameters = {'getClass': '1', 'subjectId': classNumber, 'year' : '2017'}
+            r = requests.post("https://courseroad.mit.edu/ajax.php", data = parameters)
+            if validateResponse(r.json()):
+                speech = "{} could not be found as a class.  You can find the name, instructors, longer description, or number of units for a different class.  Just ask away!".format(classNumber)
+            else:
+                speech = "You can find the name, instructors, longer description, or number of units for the class {}.  Just ask away!".format(classNumber)
     else:
         if classInfoFound:
             speech = "To get the {} of a class, just let us know the class.".format(classInfoType.lowercase())
@@ -104,46 +110,48 @@ def validateResponse(response):
         return True
     return False
 
+def getClassInfo(classnum):
+    headers = {'client_id': '89bf245efe1f4d54b5176ce68ff5da83', 'client_secret': "fd0ff77789534319B29FE6EE400291F2"}
+    now = datetime.datetime.now()
+    currentTerm = "{}".format(now.year)
+    if now.month >= 8:
+        currentTerm += "FA"
+    else:
+        currentTerm += "SP"
+    r = requests.get("https://mit-public.cloudhub.io/coursecatalog/v2/terms/{}/subjects/{}".format(currentTerm, classnum), headers = headers)
+    return r
+
 def getSubjTitle(classnum):
-    parameters = {'getClass': '1', 'subjectId': classnum, 'year' : '2017'}
-    # print(classnum)
-    r = requests.post("https://courseroad.mit.edu/ajax.php", data = parameters)
+    r = getClassInfo(classnum)
     if validateResponse(r.json()):
         return 'Not Found'
-    subjtitle = r.json()['subject_title']
+    subjtitle = r.json()["item"]["title"]
     return subjtitle
 
 def getDescp(classnum):
-    parameters = {'getClass': '1', 'subjectId': classnum, 'year' : '2017'}
-    r = requests.post("https://courseroad.mit.edu/ajax.php?getClass=1&subjectId=" + classnum +  "&year=2017", data = parameters)
+    r = getClassInfo(classnum)
     if validateResponse(r.json()):
         return 'Not Found'
-    desc = r.json()['desc']
+    desc = r.json()['item']['description']
     return desc
 
-def getFallInst(classnum):
-    parameters = {'getClass': '1', 'subjectId': classnum, 'year' : '2017'}
-    r = requests.post("https://courseroad.mit.edu/ajax.php?getClass=1&subjectId=" + classnum +  "&year=2017", data = parameters)
+def getInstructor(classnum):
+    r = getClassInfo(classnum)
     if validateResponse(r.json()):
         return 'Not Found'
-    fall = r.json()['fall_instructors']
-    return fall
-
-def getSpringInst(classnum):
-    parameters = {'getClass': '1', 'subjectId': classnum, 'year' : '2017'}
-    r = requests.post("https://courseroad.mit.edu/ajax.php?getClass=1&subjectId=" + classnum +  "&year=2017", data = parameters)
-    if validateResponse(r.json()):
-        return 'Not Found'
-    spring = r.json()['spring_instructors']
-    return spring
+    instructors = r.json()['item']['instrucotrs']
+    return instructors
 
 def getUnits(classnum):
-    parameters = {'getClass': '1', 'subjectId': classnum, 'year' : '2017'}
-    r = requests.post("https://courseroad.mit.edu/ajax.php?getClass=1&subjectId=" + classnum +  "&year=2017", data = parameters)
+    r = getClassInfo(classnum)
     if validateResponse(r.json()):
         return 'Not Found'
-    units = r.json()['total_units']
-    return str(units)
+    unitDistribution = r.json()['item']['instrucotrs']
+    units = 0
+    a = instructor.split("-")
+    for i in a:
+        units += int(i)
+    return units
 
 
 def getRoomNumber(class_name):
@@ -152,7 +160,9 @@ def getRoomNumber(class_name):
     print(r.json())
     if validateResponse(r.json()):
         return 'Not Found'
-    result_string = r.json()['d']
+    result_string = r.json().get('d', "Not Found")
+    if result_string == "Not Found":
+        return "Not Found"
     result = json.loads(result_string)
     index = -1
     for i in range(len(result)):
