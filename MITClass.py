@@ -22,14 +22,35 @@ def addContext(context, new_context):
 
 def lookupClass(req):
     speech =  "Lookup  class"
-    context = req.get("result").get("contexts")
+    contexts = req.get("result").get("contexts")
 
     parameters = req.get("result").get("parameters")
+    classNumberFound = False
+    classContextFound = False
+    for context in contexts:
+        if context.get("name", "") == "class-number-found" and context.get("parameters", {}).get("number", "") != "":
+            classContext = context
+            classNumber = context.get("parameters", {}).get("number", "")
+            classContextFound = True
+            classNumberFound = True
     if parameters.get("number") != "":
-        print("Class number found {}".format(parameters.get("number")))
         classNumber = parameters.get("number")
-        if parameters.get("ClassInfoTypes") != "":
-            classInfoType = parameters.get("ClassInfoTypes")
+        classNumberFound = True
+    if parameters.get("newnumber") != "":
+        classNumber = parameters.get("newnumber")
+        classNumberFound = True
+
+    classInfoFound = False
+    classInfoType  = ""
+    if parameters.get("ClassInfoTypes") != "":
+        classInfoType = parameters.get("ClassInfoTypes")
+        classInfoFound = True
+    if classContextFound and classContext.get("parameters", {}).get("ClassInfoTypes", "") != "":
+        classInfoType = classContext.get("parameters", {}).get("ClassInfoTypes", "") != ""
+        classInfoFound = True
+    if classNumberFound:
+        print("Class number found {}".format(parameters.get("number")))
+        if classInfoFound:
             if classInfoType == "Instructor":
                 q = getFallInst(classNumber)
                 if q != "Not Found":
@@ -62,9 +83,11 @@ def lookupClass(req):
                     speech = "{} could not be found.  Try searching for another class."
         else:
             speech = "You can find the name, instructors, longer description, or number of units of a class.  Just ask away!"
-
-        # numberContext = {"name":"class-number-found", "lifespan":7, "parameters":{"number":classNumber}}
-        # addContext(context, numberContext)
+    else:
+        if classInfoFound:
+            speech = "To get the {} of a class, just let us know the class.".format(classInfoType.lowercase())
+        else:
+            speech = "You can find the name, instructors, longer description, or number of units of a class.  Just ask away!"
 
     print(req.get("result").keys())
     print(" Recieved Context - {}".format(context))
@@ -72,7 +95,7 @@ def lookupClass(req):
         "speech": speech,
         "displayText": speech,
         # "data": data,
-        "contextOut": context,
+        "contextOut": contexts,
         "source": "apiai-weather-webhook-sample"
     }
 
