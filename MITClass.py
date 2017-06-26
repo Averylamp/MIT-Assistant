@@ -145,8 +145,14 @@ def getUnits(classnum):
     unitDistribution = r.json()['item']['units']
     units = 0
     a = unitDistribution.split("-")
-    for i in a:
-        units += int(i)
+    if " " in a[-1]:
+        a[-1] = a[-1][:a[-1].index(" ")]
+    print(a)
+    try:
+        for i in a:
+            units += int(i)
+    except:
+        return "an unknown number of "
     return units
 
 
