@@ -69,7 +69,7 @@ def lookupClass(req):
             if classInfoType == "Instructor":
                 q = getInstructor(classNumber)
                 if q != "Not Found":
-                    speech = "{} is taught by {}.".format(classNumber, q)
+                    speech = "{} is taught by {}.".format(getSubjTitle(classNumber), q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Title":
@@ -81,19 +81,19 @@ def lookupClass(req):
             elif classInfoType == "Description":
                 q = getDescp(classNumber)
                 if q != "Not Found":
-                    speech = "The long description of {} is {}.".format(classNumber, q)
+                    speech = "The long description of {} is {}.".format(getSubjTitle(classNumber), q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Units":
                 q = getUnits(classNumber)
                 if q != "Not Found":
-                    speech = "{} is {} units.".format(classNumber, q)
+                    speech = "{} is {} units.".format(getSubjTitle(classNumber), q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Room":
                 q = getRoomNumber(classNumber)
                 if q != "Not Found":
-                    speech = "{} is located in {}.".format(classNumber, q)
+                    speech = "{} is located in {}.".format(getSubjTitle(classNumber), q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
         else:
