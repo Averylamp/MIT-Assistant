@@ -81,7 +81,7 @@ def lookupClass(req):
             elif classInfoType == "Description":
                 q = getDescp(classNumber)
                 if q != "Not Found":
-                    speech = "The long description of {} is {}.".format(getSubjTitle(classNumber), q)
+                    speech = "Here's the long description of {}.  {}.".format(getSubjTitle(classNumber), q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Units":

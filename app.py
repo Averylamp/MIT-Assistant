@@ -50,9 +50,9 @@ def processRequest(req):
 	if req.get("result").get("action") == "LookUpClassInfo":
 		print("Class Info Lookup Detected")
 		return MITClass.lookupClass(req)
-	if req.get("result").get("action") == "LookUpPeople":
+	if req.get("result").get("action") == "LookUpPerson":
 		print("People Lookup Detected")
-		return lookupClass(req)
+		return MITPeople.lookupPerson(req)
 	if req.get("result").get("action") == "LookUpDining":
 		print("Dining Lookup Detected")
 		return lookupClass(req)

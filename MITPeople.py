@@ -3,68 +3,107 @@ import requests
 import json
 import sys
 
+def lookupPerson(req):
+    speech =  "Lookup  Person"
+    contexts = req.get("result").get("contexts")
 
-# --------------- Helpers that build all of the responses ----------------------
+    parameters = req.get("result").get("parameters")
+    fullQuery = req.get("result").get("resolvedQuery")
+    print("Full Query: {}".format(fullQuery))
+    firstNameFound = False
+    lastNameFound = False
+    initialFound = False
+    personContextFound = False
+    guessedLastNameFound = False
+    for context in contexts:
+        if context.get("name", "") == "current-person" :
+            personContext = context
+            personContextFound = True
+            if context.get("parameters", {}).get("given-name", "") != "":
+                firstName = context.get("parameters", {}).get("given-name", "")
+                firstNameFound = True
+                print("First Name Found - {}".format(firstName))
+            if context.get("parameters", {}).get("last-name", "") != "":
+                lastName = context.get("parameters", {}).get("last-name", "")
+                lastNameFound = True
+                print("Last Name Found - {}".format(lastName))
+            if context.get("parameters", {}).get("Initials", "") != "":
+                initialLetterFound = context.get("parameters", {}).get("Initials", "")
+                initialFound = True
+                print("Initial Found - {}".format(initialLetterFound))
+    if parameters.get("given-name", "") != "":
+        firstName = parameters.get("given-name", "")
+        firstNameFound = True
+    if parameters.get("last-name", "") != "":
+        lastName = parameters.get("last-name", "")
+        lastNameFound = True
+    if parameters.get("Initials", "") != "":
+        initialLetter = parameters.get("Initials", "")
+        initialLetterFound = True
 
+    if firstNameFound and not lastNameFound and not initialFound:
+        allQueryWords = str(fullQuery).lower().split(" ")
+        for i in range(len(allQueryWords)):
+            if allQueryWords[i] == firstName.lower() and i < len(allQueryWords) - 1:
+                guessedLastName = allQueryWords[i + 1]
+                guessedLastNameFound = True
+                print("Guessed Last Name Found - {}".format(guessedLastName))
 
-def build_speechlet_response(title, output, reprompt_text, should_end_session):
+    bestGuessFormat = []
+    foundIDs = set()
+    foundNames = set()
+    results = []
+    foundResults = False
+    if firstNameFound and (lastNameFound or guessedLastNameFound):
+        if lastNameFound:
+            bestGuessName = "{} {}".format(firstName, lastName)
+        else:
+            bestGuessName = "{} {}".format(firstName, guessedLastName)
+        bestGuessFormat = ['first', 'last']
+        q = lookup_person(bestGuessName)
+        print("{} found - {} result".format(bestGuessName, len(q)))
+        if len(q) >= 1:
+            foundResults = True
+            addToResults(results, q, foundIDs, foundNames)
+
+    if lastNameFound and not foundResults:
+        bestGuessName = "{}".format(lastName)
+        bestGuessFormat = ['last']
+        q = lookup_person(bestGuessName)
+        print("{} found - {} result".format(bestGuessName, len(q)))
+        if len(q) >= 1:
+            foundResults = True
+            addToResults(results, q, foundIDs, foundNames)
+
+    if firstNameFound and not foundResults:
+        if initialLetterFound:
+            bestGuessName = "{} {}".format(firstName, initialLetter)
+        else:
+            bestGuessName = "{}".format(firstName)
+        bestGuessFormat = ['last']
+        q = lookup_person(bestGuessName)
+        print("{} found - {} result".format(bestGuessName, len(q)))
+        if len(q) >= 1:
+            foundResults = True
+            addToResults(results, q, foundIDs, foundNames)       
+    print(foundNames)
+    speech = "{}".format(foundNames)
+    
     return {
-        'outputSpeech': {
-            'type': 'PlainText',
-            'text': output
-        },
-        'card': {
-            'type': 'Simple',
-            'title': title,
-            'content': output
-        },
-        'reprompt': {
-            'outputSpeech': {
-                'type': 'PlainText',
-                'text': reprompt_text
-            }
-        },
-        'shouldEndSession': should_end_session
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        "contextOut": contexts,
+        "source": "webhook"
     }
 
-
-def build_response(session_attributes, speechlet_response):
-    return {
-        'version': '1.0',
-        'sessionAttributes': session_attributes,
-        'response': speechlet_response
-    }
-
-
-
-# --------------- Functions that control the skill's behavior ------------------
-
-def get_welcome_response():
-    """ If we wanted to initialize the session to have some attributes we could
-    add those here
-    """
-
-    session_attributes = {}
-    card_title = "Welcome"
-    speech_output = "Welcome to MIT People.  Look up any people affiliated with MIT and get their information"
-    # If the user either does not reply to the welcome message or says something
-    # that is not understood, they will be prompted again with this text.
-    reprompt_text = "Go ahead and say, Look up and the person's name"
-    should_end_session = False
-    return build_response(session_attributes, build_speechlet_response(
-        card_title, speech_output, reprompt_text, should_end_session))
-
-
-def handle_session_end_request():
-    card_title = "Session Ended"
-    speech_output = "Thank you for using MIT People. " \
-                    "Have a nice day! "
-    # Setting this to true ends the session and exits the skill.
-    should_end_session =  True
-    return build_response({}, build_speechlet_response(
-        card_title, speech_output, None, should_end_session))
-
-
+def addToResults(results, addition, foundIDs, foundNames):
+    if len(addition) > 0:
+        for person in addition:
+            if person['id'] not in foundIDs:
+                foundIDs.add(person['id'])
+                foundNames.add(person['name'])
+                results.append(person)
 
 # --------------- Intents ------------------
 def handleConfirmIntent(intent, old_session):
@@ -192,7 +231,7 @@ def setSessionValue(session, key, value):
 def handleGetInfoIntent(intent, old_session):
     output = ""
     should_end_session = True
-    contractions = {"EARTH, ATMOS & PLANETARY SCI": "Earth, Atmosphere, and Planetary Science","Dept of Electrical Engineering & Computer Science":"Department of Electrical Engineering & Computer Science", "ELECTRICAL ENG & COMPUTER SCI":"Electrical Engineering and Computer Science", "20":"Biological engineering"}
+    contractions = {"EARTH, ATMOS & PLANETARY SCI": "Earth, Atmosphere, and Planetary Science","Dept of Electrical Engineering & Computer Science":"Department of Electrical Engineering & Computer Science", "ELECTRICAL ENG & COMPUTER SCI":"Electrical Engineering and Computer Science", "20":"Biological engineering", "MATERIALS SCIENCE AND ENG":"Materials Science and Engineering"}
     session = old_session.get('attributes', {})
     if "CurrentPerson" in session and "Found_Person" in session and session["Found_Person"] and "CurrentInformationOptions" in session:
         currentPerson = session["CurrentPerson"]
@@ -303,85 +342,3 @@ def damerau_levenshtein_distance(s1, s2):
     return d[lenstr1-1,lenstr2-1]
   
 # --------------- Events ------------------
-
-def on_session_started(session_started_request, session):
-    """ Called when the session starts """
-
-    print("on_session_started requestId=" + session_started_request['requestId']
-          + ", sessionId=" + session['sessionId'])
-
-
-def on_launch(launch_request, session):
-    """ Called when the user launches the skill without specifying what they
-    want
-    """
-
-    print("on_launch requestId=" + launch_request['requestId'] +
-          ", sessionId=" + session['sessionId'])
-    # Dispatch to your skill's launch
-    return get_welcome_response()
-
-
-def on_intent(intent_request, session):
-    """ Called when the user specifies an intent for this skill """
-
-    print("on_intent requestId=" + intent_request['requestId'] +
-          ", sessionId=" + session['sessionId'])
-
-    intent = intent_request['intent']
-    intent_name = intent_request['intent']['name']
-    r = requests.get("http://google.com")
-    
-    # Dispatch to your skill's intent handlers
-    if intent_name == "LookUp":
-        return handleLookupIntent(intent, session)
-    elif intent_name == "ConfirmPerson":
-        return handleConfirmIntent(intent, session)
-    elif intent_name == "GetInfo":
-        return handleGetInfoIntent(intent, session)
-    elif intent_name == "AMAZON.HelpIntent":
-        return get_welcome_response()
-    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
-        return handle_session_end_request()
-    else:
-        raise ValueError("Invalid intent")
-
-
-def on_session_ended(session_ended_request, session):
-    """ Called when the user ends the session. 
-
-    Is not called when the skill returns should_end_session=true
-    """
-    print("on_session_ended requestId=" + session_ended_request['requestId'] +
-          ", sessionId=" + session['sessionId'])
-    # add cleanup logic here
-
-
-# --------------- Main handler ------------------
-
-def lambda_handler(event, context):
-    """ Route the incoming request based on type (LaunchRequest, IntentRequest,
-    etc.) The JSON body of the request is provided in the event parameter.
-    """
-    print("event.session.application.applicationId=" +
-          event['session']['application']['applicationId'])
-
-    """
-    Uncomment this if statement and populate with your skill's application ID to
-    prevent someone else from configuring a skill that sends requests to this
-    function.
-    """
-    # if (event['session']['application']['applicationId'] !=
-    #         "amzn1.echo-sdk-ams.app.[unique-value-here]"):
-    #     raise ValueError("Invalid Application ID")
-
-    if event['session']['new']:
-        on_session_started({'requestId': event['request']['requestId']},
-                           event['session'])
-
-    if event['request']['type'] == "LaunchRequest":
-        return on_launch(event['request'], event['session'])
-    elif event['request']['type'] == "IntentRequest":
-        return on_intent(event['request'], event['session'])
-    elif event['request']['type'] == "SessionEndedRequest":
-        return on_session_ended(event['request'], event['session'])
