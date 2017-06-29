@@ -19,18 +19,19 @@ def lookupPerson(req):
         if context.get("name", "") == "current-person" :
             personContext = context
             personContextFound = True
-            if context.get("parameters", {}).get("given-name", "") != "":
-                firstName = context.get("parameters", {}).get("given-name", "")
+            if personContext.get("parameters", {}).get("given-name", "") != "":
+                firstName = personContext.get("parameters", {}).get("given-name", "")
                 firstNameFound = True
                 print("First Name Found - {}".format(firstName))
-            if context.get("parameters", {}).get("last-name", "") != "":
-                lastName = context.get("parameters", {}).get("last-name", "")
+            if personContext.get("parameters", {}).get("last-name", "") != "":
+                lastName = personContext.get("parameters", {}).get("last-name", "")
                 lastNameFound = True
                 print("Last Name Found - {}".format(lastName))
-            if context.get("parameters", {}).get("Initials", "") != "":
-                initialLetterFound = context.get("parameters", {}).get("Initials", "")
+            if personContext.get("parameters", {}).get("Initials", "") != "":
+                initialLetterFound = personContext.get("parameters", {}).get("Initials", "")
                 initialFound = True
                 print("Initial Found - {}".format(initialLetterFound))
+            personContext["test"] = {"hello": "there"}
     if parameters.get("given-name", "") != "":
         firstName = parameters.get("given-name", "")
         firstNameFound = True
@@ -88,7 +89,7 @@ def lookupPerson(req):
             addToResults(results, q, foundIDs, foundNames)       
     print(foundNames)
     speech = "{}".format(foundNames)
-    
+
     return {
         "speech": speech,
         "displayText": speech,
