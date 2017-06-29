@@ -90,6 +90,8 @@ def lookupPerson(req):
     print(foundNames)
     speech = "{}".format(foundNames)
 
+    contexts.append({"name":"QueryResultsContext", "lifespan":5,"parameters":{"foundPeople":list(foundNames)}})
+
     return {
         "speech": speech,
         "displayText": speech,
