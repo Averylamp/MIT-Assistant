@@ -12,7 +12,7 @@ def lookupPerson(req):
     print("Full Query: {}".format(fullQuery))
     firstNameFound = False
     lastNameFound = False
-    initialFound = False
+    initialLetterFound = False
     personContextFound = False
     guessedLastNameFound = False
     for context in contexts:
@@ -41,7 +41,7 @@ def lookupPerson(req):
         initialLetter = parameters.get("Initials", "")
         initialLetterFound = True
 
-    if firstNameFound and not lastNameFound and not initialFound:
+    if firstNameFound and not lastNameFound and not initialLetterFound:
         allQueryWords = str(fullQuery).lower().split(" ")
         for i in range(len(allQueryWords)):
             if allQueryWords[i] == firstName.lower() and i < len(allQueryWords) - 1:
