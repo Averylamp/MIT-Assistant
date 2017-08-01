@@ -95,10 +95,16 @@ def lookupPerson(req):
     print(foundNamesArr)
     if len(foundNamesArr) > 1:
         speech = "{} results found. ".format(len(foundNamesArr))
-    elif len(foundNamesArr == 1):
+    elif len(foundNamesArr) == 1:
         speech = "{} found. ".format(foundNamesArr[0])
-        
-        contexts.append({"name":"FoundPersonContext", "lifespan":5,"parameters":{"foundPerson":results}})
+        personResults = None
+        for person in results:
+            if person.get("name","") == foundNamesArr[0]:
+                personResults = person
+        optionsStr, options = choose_person_output(personResults)
+        speech += optionsStr
+        updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
+
     else:
         speech = "No people found with that name. Please try again. "
         return {
@@ -118,6 +124,29 @@ def lookupPerson(req):
         "contextOut": contexts,
         "source": "webhook"
     }
+def lookupInformation(req):
+    speech =  "Lookup  Person Information"
+    contexts = req.get("result").get("contexts")
+    parameters = req.get("result").get("parameters")
+
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        "contextOut": contexts,
+        "source": "webhook"
+    }
+    
+def updateContext(contexts, name, lifespan, parameters):
+    updated = False
+    for i in range(len(contexts)):
+        if contexts[i].get("name", "") == name:
+            contexts[i]["lifespan"] = lifespan
+            contexts[i]["parameters"] = parameters
+            updated = True
+    if updated == False:
+        contexts.append({"name":name,"lifespan":lifespan, "parameters":parameters})
 
 
 def addToResults(results, addition, foundIDs, foundNames):
@@ -302,7 +331,7 @@ def lookup_person(personName):
     else:
         return response
 
-def choose_person_output(person, session):
+def choose_person_output(person):
     options = {}
     if "title" in person:
         options["title"] = person["title"]
@@ -318,11 +347,10 @@ def choose_person_output(person, session):
         options["office"] = person["office"][0]
     if "website" in person and len(person["website"]) > 0:
         options["website"] = person["website"][0]
-    session["CurrentInformationOptions"] = options
     if len(options) > 1:
-        return "{} has {} options. {}  Or say all?  What information do you want?".format(person['name'], len(options), getListString(options.keys()))
+        return ("{} has {} options. {}  Or say all?  What information do you want?".format(person['name'], len(options), getListString(list(options.keys()))), options)
     else:
-        return "{} has {} option. {}  What information do you want?".format(person['name'], len(options), options.keys()[0])
+        return ("{} has {} option. {}  What information do you want?".format(person['name'], len(options), options.keys()[0]), options)
 
 def getListString(listName, function = None):
     output = ""
@@ -369,17 +397,17 @@ def damerau_levenshtein_distance(s1, s2):
 
 
 test = {
-  "id": "3c52ddb7-3983-4940-b08c-65cad06c825d",
-  "timestamp": "2017-08-01T19:48:05.867Z",
+  "id": "1fb32c6a-74cc-47e4-afd3-32678a96707f",
+  "timestamp": "2017-08-01T20:13:55.554Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "find elizabeth w",
+    "resolvedQuery": "find avery l",
     "action": "LookUpPerson",
     "actionIncomplete": False,
     "parameters": {
-      "given-name": "Elizabeth",
-      "Initials": "w",
+      "given-name": "Avery",
+      "Initials": "l",
       "last-name": "",
       "PersonInformationType": ""
     },
@@ -388,15 +416,141 @@ test = {
         "name": "queryresultscontext",
         "parameters": {
           "PersonInformationType.original": "",
-          "Initials.original": "w",
-          "given-name.original": "elizabeth",
+          "Initials.original": "l",
+          "given-name.original": "avery",
           "last-name.original": "",
           "foundPeople": [
-            "Avery B Lamp"
+            {
+              "surname": "Avery",
+              "givenname": "Al",
+              "name": "Al Avery",
+              "id": "aavery",
+              "email": [
+                "aavery@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/aavery"
+            },
+            {
+              "surname": "Avery",
+              "givenname": "Brent A",
+              "name": "Brent A Avery",
+              "dept": "AERONAUTICS AND ASTRONAUTICS",
+              "id": "averybal",
+              "email": [
+                "averybal@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/averybal"
+            },
+            {
+              "surname": "Avery",
+              "givenname": "Cordelia G",
+              "name": "Cordelia G Avery",
+              "dept": "ELECTRICAL ENG & COMPUTER SCI",
+              "id": "cavery",
+              "email": [
+                "cavery@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/cavery"
+            },
+            {
+              "surname": "Avery",
+              "givenname": "Reginald Keith",
+              "name": "Reginald Keith Avery",
+              "dept": "20",
+              "id": "rkavery",
+              "phone": [
+                "617-253-1998"
+              ],
+              "email": [
+                "rkavery@mit.edu"
+              ],
+              "office": [
+                "66-165"
+              ],
+              "url": "http://m.mit.edu/apis/people/rkavery"
+            },
+            {
+              "surname": "Beach",
+              "givenname": "Avery Sarah",
+              "name": "Avery Sarah Beach",
+              "dept": "MANAGEMENT",
+              "id": "abeach",
+              "email": [
+                "abeach@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/abeach"
+            },
+            {
+              "surname": "Lamp",
+              "givenname": "Avery B",
+              "name": "Avery B Lamp",
+              "dept": "ELECTRICAL ENG & COMPUTER SCI",
+              "id": "alamp",
+              "email": [
+                "alamp@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/alamp"
+            },
+            {
+              "surname": "Normandin",
+              "givenname": "Avery",
+              "name": "Avery Normandin",
+              "title": "Technical Associate I",
+              "dept": "Media Laboratory",
+              "id": "ave",
+              "phone": [
+                "603-391-1549"
+              ],
+              "email": [
+                "ave@media.mit.edu"
+              ],
+              "office": [
+                "E18-605",
+                "E15-391"
+              ],
+              "url": "http://m.mit.edu/apis/people/ave"
+            },
+            {
+              "surname": "Nortonsmith",
+              "givenname": "Avery N",
+              "name": "Avery N Nortonsmith",
+              "dept": "ELECTRICAL ENG & COMPUTER SCI",
+              "id": "averyn",
+              "email": [
+                "averyn@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/averyn"
+            },
+            {
+              "surname": "Stroman",
+              "givenname": "Avery J.",
+              "name": "Avery J. Stroman",
+              "title": "Administrative Staff",
+              "dept": "Lincoln Laboratory",
+              "id": "uid=av26971,OU=users,OU=moira,dc=MIT,dc=EDU",
+              "phone": [
+                "781-981-1653"
+              ],
+              "office": [
+                "LL-FA-250"
+              ],
+              "url": "http://m.mit.edu/apis/people/uid=av26971,OU=users,OU=moira,dc=MIT,dc=EDU"
+            },
+            {
+              "surname": "Weidman",
+              "givenname": "Avery",
+              "name": "Avery Weidman",
+              "dept": "MANAGEMENT",
+              "id": "weidman",
+              "email": [
+                "weidman@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/weidman"
+            }
           ],
-          "given-name": "Elizabeth",
+          "given-name": "Avery",
           "PersonInformationType": "",
-          "Initials": "w",
+          "Initials": "l",
           "last-name": ""
         },
         "lifespan": 4
@@ -405,67 +559,38 @@ test = {
         "name": "current-person",
         "parameters": {
           "PersonInformationType.original": "",
-          "Initials.original": "w",
-          "given-name.original": "elizabeth",
+          "Initials.original": "l",
+          "given-name.original": "avery",
           "last-name.original": "",
-          "given-name": "Elizabeth",
+          "given-name": "Avery",
           "PersonInformationType": "",
-          "Initials": "w",
+          "Initials": "l",
           "last-name": ""
         },
         "lifespan": 10
-      },
-      {
-        "name": "QueryResultsContext",
-        "parameters": {
-          "foundPeople": [
-            "Elizabeth Jane Wallace",
-            "Elizabeth Wallace",
-            "Elizabeth Mari Ward",
-            "Elizabeth W Parmelee",
-            "Elizabeth Weingartner",
-            "Elizabeth A. Whalen",
-            "Elizabeth Courtenay Wilson",
-            "Elizabeth Megan Willis",
-            "Elizabeth Wagner",
-            "Elizabeth M Wei",
-            "Elizabeth Charlotte Wittenborn",
-            "Elizabeth W. Evans",
-            "Elizabeth C Walsh",
-            "Elizabeth Whittaker",
-            "Elizabeth A Wood",
-            "Elizabeth Woyke",
-            "Elizabeth P Walker",
-            "Elizabeth W Gaylord",
-            "Elizabeth W. Copeland"
-          ]
-        },
-        "lifespan": 5
       }
     ],
     "metadata": {
       "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "webhookResponseTime": 1211,
       "intentName": "Look Up Person"
     },
     "fulfillment": {
-      "speech": "{'Elizabeth Jane Wallace', 'Elizabeth Wallace', 'Elizabeth Mari Ward', 'Elizabeth W Parmelee', 'Elizabeth Weingartner', 'Elizabeth A. Whalen', 'Elizabeth Courtenay Wilson', 'Elizabeth Megan Willis', 'Elizabeth Wagner', 'Elizabeth M Wei', 'Elizabeth Charlotte Wittenborn', 'Elizabeth W. Evans', 'Elizabeth C Walsh', 'Elizabeth Whittaker', 'Elizabeth A Wood', 'Elizabeth Woyke', 'Elizabeth P Walker', 'Elizabeth W Gaylord', 'Elizabeth W. Copeland'}",
-      "source": "webhook",
-      "displayText": "{'Elizabeth Jane Wallace', 'Elizabeth Wallace', 'Elizabeth Mari Ward', 'Elizabeth W Parmelee', 'Elizabeth Weingartner', 'Elizabeth A. Whalen', 'Elizabeth Courtenay Wilson', 'Elizabeth Megan Willis', 'Elizabeth Wagner', 'Elizabeth M Wei', 'Elizabeth Charlotte Wittenborn', 'Elizabeth W. Evans', 'Elizabeth C Walsh', 'Elizabeth Whittaker', 'Elizabeth A Wood', 'Elizabeth Woyke', 'Elizabeth P Walker', 'Elizabeth W Gaylord', 'Elizabeth W. Copeland'}",
+      "speech": "People Response",
       "messages": [
         {
           "type": 0,
-          "speech": "{'Elizabeth Jane Wallace', 'Elizabeth Wallace', 'Elizabeth Mari Ward', 'Elizabeth W Parmelee', 'Elizabeth Weingartner', 'Elizabeth A. Whalen', 'Elizabeth Courtenay Wilson', 'Elizabeth Megan Willis', 'Elizabeth Wagner', 'Elizabeth M Wei', 'Elizabeth Charlotte Wittenborn', 'Elizabeth W. Evans', 'Elizabeth C Walsh', 'Elizabeth Whittaker', 'Elizabeth A Wood', 'Elizabeth Woyke', 'Elizabeth P Walker', 'Elizabeth W Gaylord', 'Elizabeth W. Copeland'}"
+          "speech": "People Response"
         }
       ]
     },
     "score": 1
   },
   "status": {
-    "code": 200,
-    "errorType": "success"
+    "code": 206,
+    "errorType": "partial_content",
+    "errorDetails": "Webhook call failed. Error: 500 INTERNAL SERVER ERROR"
   },
   "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
 }
