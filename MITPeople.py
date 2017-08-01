@@ -87,6 +87,16 @@ def lookupPerson(req):
         if len(q) >= 1:
             foundResults = True
             addToResults(results, q, foundIDs, foundNames)       
+    if foundResults == False:
+        speech = "No people found with that name. Please try again. "
+        print("No results found")
+        return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        "contextOut": contexts,
+        "source": "webhook"
+        }
     print(foundNames)
     # if len(foundNames) == 1 :
     #     speech = "Found {}.  What would you like to know about them?".format(foundNames[0])
@@ -105,15 +115,6 @@ def lookupPerson(req):
         speech += optionsStr
         updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
 
-    else:
-        speech = "No people found with that name. Please try again. "
-        return {
-        "speech": speech,
-        "displayText": speech,
-        # "data": data,
-        "contextOut": contexts,
-        "source": "webhook"
-        }
 
     contexts.append({"name":"QueryResultsContext", "lifespan":5,"parameters":{"foundPeople":results}})
     print(speech)
@@ -137,7 +138,7 @@ def lookupInformation(req):
         "contextOut": contexts,
         "source": "webhook"
     }
-    
+
 def updateContext(contexts, name, lifespan, parameters):
     updated = False
     for i in range(len(contexts)):
@@ -397,200 +398,73 @@ def damerau_levenshtein_distance(s1, s2):
 
 
 test = {
-  "id": "1fb32c6a-74cc-47e4-afd3-32678a96707f",
-  "timestamp": "2017-08-01T20:13:55.554Z",
+  "id": "bb48dab0-b984-4089-82ea-b24334baae65",
+  "timestamp": "2017-08-01T21:01:34.299Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "find avery l",
+    "resolvedQuery": "look up Avery Lamp",
     "action": "LookUpPerson",
     "actionIncomplete": False,
     "parameters": {
       "given-name": "Avery",
-      "Initials": "l",
+      "Initials": "",
       "last-name": "",
       "PersonInformationType": ""
     },
     "contexts": [
       {
-        "name": "queryresultscontext",
-        "parameters": {
-          "PersonInformationType.original": "",
-          "Initials.original": "l",
-          "given-name.original": "avery",
-          "last-name.original": "",
-          "foundPeople": [
-            {
-              "surname": "Avery",
-              "givenname": "Al",
-              "name": "Al Avery",
-              "id": "aavery",
-              "email": [
-                "aavery@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/aavery"
-            },
-            {
-              "surname": "Avery",
-              "givenname": "Brent A",
-              "name": "Brent A Avery",
-              "dept": "AERONAUTICS AND ASTRONAUTICS",
-              "id": "averybal",
-              "email": [
-                "averybal@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/averybal"
-            },
-            {
-              "surname": "Avery",
-              "givenname": "Cordelia G",
-              "name": "Cordelia G Avery",
-              "dept": "ELECTRICAL ENG & COMPUTER SCI",
-              "id": "cavery",
-              "email": [
-                "cavery@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/cavery"
-            },
-            {
-              "surname": "Avery",
-              "givenname": "Reginald Keith",
-              "name": "Reginald Keith Avery",
-              "dept": "20",
-              "id": "rkavery",
-              "phone": [
-                "617-253-1998"
-              ],
-              "email": [
-                "rkavery@mit.edu"
-              ],
-              "office": [
-                "66-165"
-              ],
-              "url": "http://m.mit.edu/apis/people/rkavery"
-            },
-            {
-              "surname": "Beach",
-              "givenname": "Avery Sarah",
-              "name": "Avery Sarah Beach",
-              "dept": "MANAGEMENT",
-              "id": "abeach",
-              "email": [
-                "abeach@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/abeach"
-            },
-            {
-              "surname": "Lamp",
-              "givenname": "Avery B",
-              "name": "Avery B Lamp",
-              "dept": "ELECTRICAL ENG & COMPUTER SCI",
-              "id": "alamp",
-              "email": [
-                "alamp@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/alamp"
-            },
-            {
-              "surname": "Normandin",
-              "givenname": "Avery",
-              "name": "Avery Normandin",
-              "title": "Technical Associate I",
-              "dept": "Media Laboratory",
-              "id": "ave",
-              "phone": [
-                "603-391-1549"
-              ],
-              "email": [
-                "ave@media.mit.edu"
-              ],
-              "office": [
-                "E18-605",
-                "E15-391"
-              ],
-              "url": "http://m.mit.edu/apis/people/ave"
-            },
-            {
-              "surname": "Nortonsmith",
-              "givenname": "Avery N",
-              "name": "Avery N Nortonsmith",
-              "dept": "ELECTRICAL ENG & COMPUTER SCI",
-              "id": "averyn",
-              "email": [
-                "averyn@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/averyn"
-            },
-            {
-              "surname": "Stroman",
-              "givenname": "Avery J.",
-              "name": "Avery J. Stroman",
-              "title": "Administrative Staff",
-              "dept": "Lincoln Laboratory",
-              "id": "uid=av26971,OU=users,OU=moira,dc=MIT,dc=EDU",
-              "phone": [
-                "781-981-1653"
-              ],
-              "office": [
-                "LL-FA-250"
-              ],
-              "url": "http://m.mit.edu/apis/people/uid=av26971,OU=users,OU=moira,dc=MIT,dc=EDU"
-            },
-            {
-              "surname": "Weidman",
-              "givenname": "Avery",
-              "name": "Avery Weidman",
-              "dept": "MANAGEMENT",
-              "id": "weidman",
-              "email": [
-                "weidman@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/weidman"
-            }
-          ],
-          "given-name": "Avery",
-          "PersonInformationType": "",
-          "Initials": "l",
-          "last-name": ""
-        },
-        "lifespan": 4
-      },
-      {
         "name": "current-person",
         "parameters": {
           "PersonInformationType.original": "",
-          "Initials.original": "l",
-          "given-name.original": "avery",
+          "Initials.original": "",
+          "given-name.original": "Avery",
           "last-name.original": "",
           "given-name": "Avery",
           "PersonInformationType": "",
-          "Initials": "l",
+          "Initials": "",
           "last-name": ""
         },
         "lifespan": 10
+      },
+      {
+        "name": "lookupperson-followup",
+        "parameters": {
+          "PersonInformationType.original": "",
+          "Initials.original": "",
+          "given-name.original": "Avery",
+          "last-name.original": "",
+          "given-name": "Avery",
+          "PersonInformationType": "",
+          "Initials": "",
+          "last-name": ""
+        },
+        "lifespan": 2
       }
     ],
     "metadata": {
       "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
+      "webhookResponseTime": 174,
       "intentName": "Look Up Person"
     },
     "fulfillment": {
-      "speech": "People Response",
+      "speech": "Unable to proccess the request.  Try again later please.",
+      "source": "webhook",
+      "displayText": "Unable to proccess the request.  Try again later please.",
       "messages": [
         {
           "type": 0,
-          "speech": "People Response"
+          "speech": "Unable to proccess the request.  Try again later please."
         }
       ]
     },
-    "score": 1
+    "score": 0.9599999785423279
   },
   "status": {
-    "code": 206,
-    "errorType": "partial_content",
-    "errorDetails": "Webhook call failed. Error: 500 INTERNAL SERVER ERROR"
+    "code": 200,
+    "errorType": "success"
   },
   "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
 }
