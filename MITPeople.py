@@ -88,10 +88,29 @@ def lookupPerson(req):
             foundResults = True
             addToResults(results, q, foundIDs, foundNames)       
     print(foundNames)
-    speech = "{}".format(foundNames)
+    # if len(foundNames) == 1 :
+    #     speech = "Found {}.  What would you like to know about them?".format(foundNames[0])
+    foundNamesArr = sorted(list(foundNames), key=lambda x: damerau_levenshtein_distance(bestGuessName, x))
+    print(bestGuessName)
+    print(foundNamesArr)
+    if len(foundNamesArr) > 1:
+        speech = "{} results found. ".format(len(foundNamesArr))
+    elif len(foundNamesArr == 1):
+        speech = "{} found. ".format(foundNamesArr[0])
+        
+        contexts.append({"name":"FoundPersonContext", "lifespan":5,"parameters":{"foundPerson":results}})
+    else:
+        speech = "No people found with that name. Please try again. "
+        return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        "contextOut": contexts,
+        "source": "webhook"
+        }
 
-    contexts.append({"name":"QueryResultsContext", "lifespan":5,"parameters":{"foundPeople":list(foundNames)}})
-
+    contexts.append({"name":"QueryResultsContext", "lifespan":5,"parameters":{"foundPeople":results}})
+    print(speech)
     return {
         "speech": speech,
         "displayText": speech,
@@ -99,6 +118,7 @@ def lookupPerson(req):
         "contextOut": contexts,
         "source": "webhook"
     }
+
 
 def addToResults(results, addition, foundIDs, foundNames):
     if len(addition) > 0:
@@ -345,3 +365,108 @@ def damerau_levenshtein_distance(s1, s2):
     return d[lenstr1-1,lenstr2-1]
   
 # --------------- Events ------------------
+
+
+
+test = {
+  "id": "3c52ddb7-3983-4940-b08c-65cad06c825d",
+  "timestamp": "2017-08-01T19:48:05.867Z",
+  "lang": "en",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "find elizabeth w",
+    "action": "LookUpPerson",
+    "actionIncomplete": False,
+    "parameters": {
+      "given-name": "Elizabeth",
+      "Initials": "w",
+      "last-name": "",
+      "PersonInformationType": ""
+    },
+    "contexts": [
+      {
+        "name": "queryresultscontext",
+        "parameters": {
+          "PersonInformationType.original": "",
+          "Initials.original": "w",
+          "given-name.original": "elizabeth",
+          "last-name.original": "",
+          "foundPeople": [
+            "Avery B Lamp"
+          ],
+          "given-name": "Elizabeth",
+          "PersonInformationType": "",
+          "Initials": "w",
+          "last-name": ""
+        },
+        "lifespan": 4
+      },
+      {
+        "name": "current-person",
+        "parameters": {
+          "PersonInformationType.original": "",
+          "Initials.original": "w",
+          "given-name.original": "elizabeth",
+          "last-name.original": "",
+          "given-name": "Elizabeth",
+          "PersonInformationType": "",
+          "Initials": "w",
+          "last-name": ""
+        },
+        "lifespan": 10
+      },
+      {
+        "name": "QueryResultsContext",
+        "parameters": {
+          "foundPeople": [
+            "Elizabeth Jane Wallace",
+            "Elizabeth Wallace",
+            "Elizabeth Mari Ward",
+            "Elizabeth W Parmelee",
+            "Elizabeth Weingartner",
+            "Elizabeth A. Whalen",
+            "Elizabeth Courtenay Wilson",
+            "Elizabeth Megan Willis",
+            "Elizabeth Wagner",
+            "Elizabeth M Wei",
+            "Elizabeth Charlotte Wittenborn",
+            "Elizabeth W. Evans",
+            "Elizabeth C Walsh",
+            "Elizabeth Whittaker",
+            "Elizabeth A Wood",
+            "Elizabeth Woyke",
+            "Elizabeth P Walker",
+            "Elizabeth W Gaylord",
+            "Elizabeth W. Copeland"
+          ]
+        },
+        "lifespan": 5
+      }
+    ],
+    "metadata": {
+      "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
+      "webhookUsed": "true",
+      "webhookForSlotFillingUsed": "false",
+      "webhookResponseTime": 1211,
+      "intentName": "Look Up Person"
+    },
+    "fulfillment": {
+      "speech": "{'Elizabeth Jane Wallace', 'Elizabeth Wallace', 'Elizabeth Mari Ward', 'Elizabeth W Parmelee', 'Elizabeth Weingartner', 'Elizabeth A. Whalen', 'Elizabeth Courtenay Wilson', 'Elizabeth Megan Willis', 'Elizabeth Wagner', 'Elizabeth M Wei', 'Elizabeth Charlotte Wittenborn', 'Elizabeth W. Evans', 'Elizabeth C Walsh', 'Elizabeth Whittaker', 'Elizabeth A Wood', 'Elizabeth Woyke', 'Elizabeth P Walker', 'Elizabeth W Gaylord', 'Elizabeth W. Copeland'}",
+      "source": "webhook",
+      "displayText": "{'Elizabeth Jane Wallace', 'Elizabeth Wallace', 'Elizabeth Mari Ward', 'Elizabeth W Parmelee', 'Elizabeth Weingartner', 'Elizabeth A. Whalen', 'Elizabeth Courtenay Wilson', 'Elizabeth Megan Willis', 'Elizabeth Wagner', 'Elizabeth M Wei', 'Elizabeth Charlotte Wittenborn', 'Elizabeth W. Evans', 'Elizabeth C Walsh', 'Elizabeth Whittaker', 'Elizabeth A Wood', 'Elizabeth Woyke', 'Elizabeth P Walker', 'Elizabeth W Gaylord', 'Elizabeth W. Copeland'}",
+      "messages": [
+        {
+          "type": 0,
+          "speech": "{'Elizabeth Jane Wallace', 'Elizabeth Wallace', 'Elizabeth Mari Ward', 'Elizabeth W Parmelee', 'Elizabeth Weingartner', 'Elizabeth A. Whalen', 'Elizabeth Courtenay Wilson', 'Elizabeth Megan Willis', 'Elizabeth Wagner', 'Elizabeth M Wei', 'Elizabeth Charlotte Wittenborn', 'Elizabeth W. Evans', 'Elizabeth C Walsh', 'Elizabeth Whittaker', 'Elizabeth A Wood', 'Elizabeth Woyke', 'Elizabeth P Walker', 'Elizabeth W Gaylord', 'Elizabeth W. Copeland'}"
+        }
+      ]
+    },
+    "score": 1
+  },
+  "status": {
+    "code": 200,
+    "errorType": "success"
+  },
+  "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
+}
+lookupPerson(test)
