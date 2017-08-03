@@ -56,6 +56,9 @@ def processRequest(req):
 	if req.get("result").get("action") == "LookUpPerson.LookUpInformation":
 		print("People Lookup Detected")
 		return MITPeople.lookupInformation(req)
+	if req.get("result").get("action") == "LookUpPerson.LookUpConfirmation":
+		print("People Confirmation Detected")
+		return MITPeople.confirmPerson(req)
 	if req.get("result").get("action") == "LookUpDining":
 		print("Dining Lookup Detected")
 		return lookupClass(req)

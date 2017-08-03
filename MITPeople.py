@@ -122,7 +122,7 @@ def lookupPerson(req):
                 speech += "The first five are: " + getListString(foundNamesArr[:5]) + ". "
             else:
                 speech += "They are: " + getListString(foundNamesArr) + ". "
-            speech += "To confirm the person you are looking for say their full name again"
+            speech += "To confirm the person you are looking for say confirm, then their full name again"
             updateContext(contexts, "ConfirmPersonContext", 2, {"ConfirmPerson":True})
     elif len(foundNamesArr) == 1:
         speech = "{} found. ".format(foundNamesArr[0])
@@ -145,6 +145,21 @@ def lookupPerson(req):
         "contextOut": contexts,
         "source": "webhook"
     }
+
+def confirmPerson(req):
+    speech =  "Lookup  Person Information"
+    contexts = req.get("result").get("contexts")
+    parameters = req.get("result").get("parameters")
+
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        "contextOut": contexts,
+        "source": "webhook"
+    }
+
 def lookupInformation(req):
     speech =  "Lookup  Person Information"
     contexts = req.get("result").get("contexts")
