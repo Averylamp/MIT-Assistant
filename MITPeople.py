@@ -16,7 +16,7 @@ def lookupPerson(req):
     personContextFound = False
     guessedLastNameFound = False
     for context in contexts:
-        if context.get("name", "") == "current-person" :
+        if context.get("name", "").lower() == "current-person" :
             personContext = context
             personContextFound = True
             if personContext.get("parameters", {}).get("given-name", "") != "":
@@ -106,16 +106,16 @@ def lookupPerson(req):
     if len(foundNamesArr) > 1:
         confirmPerson = False
         for context in contexts:
-            if context.get("name", "") == "ConfirmPersonContext":
+            if context.get("name", "").lower()  == "ConfirmPersonContext".lower() :
                 if context.get("ConfirmPerson", False) == True:
                     confirmPerson = True
         if confirmPerson:
             for person in results:
-                if person.get("name","") == foundNamesArr[0]:
+                if person.get("name","").lower()  == foundNamesArr[0].lower() :
                     personResults = person
             optionsStr, options = choose_person_output(personResults)
             speech += optionsStr
-            updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
+            updateContext(contexts, "FoundPersonContext".lower() , 5, {"foundPerson":results,"foundOptions":options})
         else:
             speech = "{} results found. ".format(len(foundNamesArr))
             if len(foundNamesArr) > 5:
@@ -123,19 +123,19 @@ def lookupPerson(req):
             else:
                 speech += "They are: " + getListString(foundNamesArr) + ". "
             speech += "To confirm the person you are looking for say confirm, then their full name again"
-            updateContext(contexts, "ConfirmPersonContext", 2, {"ConfirmPerson":True})
+            updateContext(contexts, "ConfirmPersonContext".lower() , 2, {"ConfirmPerson":True})
     elif len(foundNamesArr) == 1:
         speech = "{} found. ".format(foundNamesArr[0])
         personResults = None
         for person in results:
-            if person.get("name","") == foundNamesArr[0]:
+            if person.get("name","").lower()  == foundNamesArr[0].lower() :
                 personResults = person
         optionsStr, options = choose_person_output(personResults)
         speech += optionsStr
-        updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
+        updateContext(contexts, "FoundPersonContext".lower() , 5, {"foundPerson":results,"foundOptions":options})
 
 
-    contexts.append({"name":"QueryResultsContext", "lifespan":5,"parameters":{"foundPeople":results}})
+    contexts.append({"name":"QueryResultsContext".lower() , "lifespan":5,"parameters":{"foundPeople":results}})
     print("----------- Final response -------------")
     print(speech)
     return {
@@ -159,7 +159,7 @@ def confirmPerson(req):
     personContextFound = False
     guessedLastNameFound = False
     for context in contexts:
-        if context.get("name", "") == "current-person" :
+        if context.get("name", "").lower()  == "current-person".lower()  :
             personContext = context
             personContextFound = True
             if personContext.get("parameters", {}).get("given-name", "") != "":
@@ -226,7 +226,7 @@ def confirmPerson(req):
     foundNames = []
     searchResults = None
     for context in contexts:
-        if context.get("name", "") == "queryresultscontext" :
+        if context.get("name", "").lower() == "queryresultscontext".lower()  :
             searchResults = context["parameters"].get("foundPeople",[])
             for item in searchResults:
                 name = item.get("name", None)
@@ -235,14 +235,13 @@ def confirmPerson(req):
     foundNamesArr = sorted(foundNames, key=lambda x: damerau_levenshtein_distance(bestGuessName, x))
     print(foundNamesArr)
     for person in searchResults:
-        if person.get("name","") == foundNamesArr[0]:
+        if person.get("name","").lower()  == foundNamesArr[0].lower() :
             personResults = person
             optionsStr, options = choose_person_output(personResults)
             speech = optionsStr
             updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
     print("--------- Final Speech ---------")
     print(speech)
-    
     return {
         "speech": speech,
         "displayText": speech,
@@ -268,12 +267,12 @@ def lookupInformation(req):
 def updateContext(contexts, name, lifespan, parameters):
     updated = False
     for i in range(len(contexts)):
-        if contexts[i].get("name", "") == name:
+        if contexts[i].get("name", "").lower() == name.lower():
             contexts[i]["lifespan"] = lifespan
             contexts[i]["parameters"] = parameters
             updated = True
     if updated == False:
-        contexts.append({"name":name,"lifespan":lifespan, "parameters":parameters})
+        contexts.append({"name":name.lower(),"lifespan":lifespan, "parameters":parameters})
 
 
 def addToResults(results, addition, foundIDs, foundNames):
