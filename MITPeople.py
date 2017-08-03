@@ -130,10 +130,10 @@ def lookupPerson(req):
             speech = "{} results found. ".format(len(foundNamesArr))
             if len(foundNamesArr) > 5:
                 speech += "The first five are: " + getListString(foundNamesArr[:5]) + " "
-                suggestions = suggestions + foundNamesArr[:5].map(lambda x: "Confirm " + x)
+                suggestions = suggestions + list(map(lambda x: "Confirm " + x, foundNamesArr[:5]))
             else:
-                speech += "They are: " + getListString(foundNamesArr) + ". "
-                suggestions = suggestions + foundNamesArr.map(lambda x: "Confirm " + x)
+                speech += "They are: " + getListString(foundNamesArr) + ". " 
+                suggestions = suggestions + list(map(lambda x: "Confirm " + x, foundNamesArr))
             speech += "To confirm the person you are looking for say confirm, then their full name again"
             updateContext(contexts, "ConfirmPersonContext".lower() , 2, {"ConfirmPerson":True})
     elif len(foundNamesArr) == 1:
