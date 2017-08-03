@@ -127,7 +127,7 @@ def lookupPerson(req):
         else:
             speech = "{} results found. ".format(len(foundNamesArr))
             if len(foundNamesArr) > 5:
-                speech += "The first five are: " + getListString(foundNamesArr[:5]) + ". "
+                speech += "The first five are: " + getListString(foundNamesArr[:5]) + " "
             else:
                 speech += "They are: " + getListString(foundNamesArr) + ". "
             speech += "To confirm the person you are looking for say confirm, then their full name again"
