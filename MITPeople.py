@@ -128,10 +128,11 @@ def lookupPerson(req):
             speech = "{} results found. ".format(len(foundNamesArr))
             if len(foundNamesArr) > 5:
                 speech += "The first five are: " + getListString(foundNamesArr[:5]) + " "
-                suggestions = suggestions + foundNamesArr[:10]
+                for
+                suggestions = suggestions + foundNamesArr[:5].map(lambda x: "Confirm " + x)
             else:
                 speech += "They are: " + getListString(foundNamesArr) + ". "
-                suggestions = suggestions + foundNamesArr
+                suggestions = suggestions + foundNamesArr.map(lambda x: "Confirm " + x)
             speech += "To confirm the person you are looking for say confirm, then their full name again"
             updateContext(contexts, "ConfirmPersonContext".lower() , 2, {"ConfirmPerson":True})
     elif len(foundNamesArr) == 1:
@@ -252,7 +253,7 @@ def confirmPerson(req):
             personResults = person
             optionsStr, options = choose_person_output(personResults)
             speech = optionsStr
-            suggestions = suggestions + ["all"] + options
+            suggestions = suggestions + ["all"] + list(options)
             updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":personResults,"foundOptions":options})
     print("--------- Final Speech ---------")
     print(speech)
@@ -277,6 +278,7 @@ def lookupInformation(req):
             foundPersonContext = context
             foundPersonName = foundPersonContext["parameters"].get("foundPerson", {}).get("name", "The person")
             foundOptions = foundPersonContext["parameters"].get("foundOptions", {})
+            suggestions = suggestions +  ["all"] + list(foundOptions)
             print(foundPersonName)
             print(foundOptions)
 
@@ -300,7 +302,7 @@ def lookupInformation(req):
         speech = "Sorry, I am unable to determine information to retrieve."
     print("----------- Final response -------------")
     print(speech)
-    data = addSuggestions()
+    data = addSuggestions(speech, suggestions)
     return {
         "speech": speech,
         "displayText": speech,
