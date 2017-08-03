@@ -6,7 +6,7 @@ import sys
 def lookupPerson(req):
     speech =  "Lookup  Person"
     contexts = req.get("result").get("contexts")
-
+    suggestions = []
     parameters = req.get("result").get("parameters")
     fullQuery = req.get("result").get("resolvedQuery")
     print("Full Query: {}".format(fullQuery))
@@ -128,8 +128,10 @@ def lookupPerson(req):
             speech = "{} results found. ".format(len(foundNamesArr))
             if len(foundNamesArr) > 5:
                 speech += "The first five are: " + getListString(foundNamesArr[:5]) + " "
+                suggestions = suggestions + foundNamesArr[:10]
             else:
                 speech += "They are: " + getListString(foundNamesArr) + ". "
+                suggestions = suggestions + foundNamesArr
             speech += "To confirm the person you are looking for say confirm, then their full name again"
             updateContext(contexts, "ConfirmPersonContext".lower() , 2, {"ConfirmPerson":True})
     elif len(foundNamesArr) == 1:
@@ -139,6 +141,7 @@ def lookupPerson(req):
             if person.get("name","").lower()  == foundNamesArr[0].lower() :
                 personResults = person
         optionsStr, options = choose_person_output(personResults)
+        suggestions = suggestions + ["all"] + list(options)
         speech += optionsStr
         updateContext(contexts, "FoundPersonContext".lower() , 5, {"foundPerson":results,"foundOptions":options})
 
@@ -146,7 +149,7 @@ def lookupPerson(req):
     contexts.append({"name":"QueryResultsContext".lower() , "lifespan":5,"parameters":{"foundPeople":results}})
     print("----------- Final response -------------")
     print(speech)
-    data = addSuggestions()
+    data = addSuggestions(speech, suggestions)
     return {
         "speech": speech,
         "displayText": speech,
@@ -159,6 +162,7 @@ def confirmPerson(req):
     speech =  "Lookup  Person Information"
     contexts = req.get("result").get("contexts")
     parameters = req.get("result").get("parameters")
+    suggestions = []
 
     fullQuery = req.get("result").get("resolvedQuery")
     print("Full Query: {}".format(fullQuery))
@@ -248,10 +252,11 @@ def confirmPerson(req):
             personResults = person
             optionsStr, options = choose_person_output(personResults)
             speech = optionsStr
+            suggestions = suggestions + ["all"] + options
             updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":personResults,"foundOptions":options})
     print("--------- Final Speech ---------")
     print(speech)
-    data =  addSuggestions
+    data = addSuggestions(speech, suggestions)
     return {
         "speech": speech,
         "displayText": speech,
@@ -559,7 +564,10 @@ def damerau_levenshtein_distance(s1, s2):
   
 # --------------- Events ------------------
 
-def addSuggestions(suggestions = []):
+def addSuggestions(speech = "", suggestions = []):
+    suggestionsTitles = []
+    for item in suggestions:
+        suggestionsTitles.append({"title":item})
     return {
    "google":{
       "expect_user_response":True,
@@ -567,25 +575,12 @@ def addSuggestions(suggestions = []):
          "items":[
             {
                "simpleResponse":{
-                  "textToSpeech":"This is the 2nd simple response ",
-                  "displayText":"This is the 2nd simple response"
+                  "textToSpeech":speech,
+                  "displayText":speech
                }
             }
          ],
-         "suggestions":[
-            {
-               "title":"Basic Card"
-            },
-            {
-               "title":"List"
-            },
-            {
-               "title":"Carousel"
-            },
-            {
-               "title":"Suggestions"
-            }
-         ]
+         "suggestions": suggestionsTitles
       }
    }
 }
