@@ -590,157 +590,34 @@ def addSuggestions(speech = "", suggestions = []):
 
 
 test = {
-  "id": "d68e6a17-b8d3-4897-9ba2-4fcf69809fbe",
-  "timestamp": "2017-08-03T10:35:32.409Z",
+  "id": "3a5f572a-d359-4b9f-88e4-3d2a2de0df69",
+  "timestamp": "2017-08-03T11:30:33.623Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "find avery lamp",
+    "resolvedQuery": "look up avery",
     "action": "LookUpPerson",
     "actionIncomplete": False,
     "parameters": {
       "given-name": "",
       "Initials": "",
-      "last-name": "",
+      "last-name": "Avery",
       "PersonInformationType": ""
     },
     "contexts": [
-      {
-        "name": "queryresultscontext",
-        "parameters": {
-          "Initials.original": "",
-          "PersonInformationType.original": "",
-          "given-name.original": "",
-          "last-name.original": "",
-          "foundPeople": [
-            {
-              "surname": "Ducao",
-              "givenname": "Arlene",
-              "name": "Arlene Brigoli Ducao",
-              "id": "arlduc",
-              "email": [
-                "arlduc@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/arlduc"
-            },
-            {
-              "surname": "Grant",
-              "givenname": "Arlene J",
-              "name": "Arlene J Grant",
-              "title": "Dormitory Housekeeper",
-              "dept": "Department of Housing",
-              "id": "arleneg",
-              "phone": [
-                "617-253-5107"
-              ],
-              "email": [
-                "arleneg@mit.edu"
-              ],
-              "office": [
-                "W79"
-              ],
-              "url": "http://m.mit.edu/apis/people/arleneg"
-            },
-            {
-              "surname": "Heywood-Dortch",
-              "givenname": "Arlene",
-              "name": "Arlene Heywood-Dortch",
-              "id": "ahdortch",
-              "email": [
-                "ahdortch@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/ahdortch"
-            },
-            {
-              "surname": "Siswanto",
-              "givenname": "Arlene E",
-              "name": "Arlene E Siswanto",
-              "dept": "ELECTRICAL ENG & COMPUTER SCI",
-              "id": "siswanto",
-              "email": [
-                "siswanto@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/siswanto"
-            },
-            {
-              "surname": "Wint",
-              "givenname": "Arlene",
-              "name": "Arlene Wint",
-              "title": "Administrative Assistant II",
-              "dept": "Research Laboratory of Electronics",
-              "id": "aewint",
-              "phone": [
-                "617-324-4349"
-              ],
-              "email": [
-                "aewint@mit.edu"
-              ],
-              "office": [
-                "36-872"
-              ],
-              "url": "http://m.mit.edu/apis/people/aewint"
-            },
-            {
-              "surname": "Wyman",
-              "givenname": "Arlene",
-              "name": "Arlene Wyman",
-              "id": "arlenew",
-              "email": [
-                "arlenew@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/arlenew"
-            }
-          ],
-          "given-name": "",
-          "Initials": "",
-          "PersonInformationType": "",
-          "last-name": ""
-        },
-        "lifespan": 2
-      },
       {
         "name": "current-person",
         "parameters": {
           "PersonInformationType.original": "",
           "Initials.original": "",
           "given-name.original": "",
-          "last-name.original": "",
+          "last-name.original": "avery",
           "given-name": "",
           "PersonInformationType": "",
           "Initials": "",
-          "last-name": ""
+          "last-name": "Avery"
         },
         "lifespan": 10
-      },
-      {
-        "name": "foundpersoncontext",
-        "parameters": {
-          "Initials.original": "",
-          "given-name.original": "",
-          "PersonInformationType.original": "",
-          "last-name.original": "",
-          "foundPerson": {
-            "surname": "Siswanto",
-            "givenname": "Arlene E",
-            "name": "Arlene E Siswanto",
-            "dept": "ELECTRICAL ENG & COMPUTER SCI",
-            "id": "siswanto",
-            "email": [
-              "siswanto@mit.edu"
-            ],
-            "url": "http://m.mit.edu/apis/people/siswanto"
-          },
-          "foundOptions": {
-            "department": "ELECTRICAL ENG & COMPUTER SCI",
-            "kerberos": "siswanto",
-            "email": "siswanto@mit.edu"
-          },
-          "given-name": "",
-          "Initials": "",
-          "PersonInformationType": "",
-          "last-name": ""
-        },
-        "lifespan": 4
       },
       {
         "name": "lookupperson-followup",
@@ -748,11 +625,11 @@ test = {
           "PersonInformationType.original": "",
           "Initials.original": "",
           "given-name.original": "",
-          "last-name.original": "",
+          "last-name.original": "avery",
           "given-name": "",
           "PersonInformationType": "",
           "Initials": "",
-          "last-name": ""
+          "last-name": "Avery"
         },
         "lifespan": 2
       }
@@ -761,25 +638,23 @@ test = {
       "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "webhookResponseTime": 44,
       "intentName": "Look Up Person"
     },
     "fulfillment": {
-      "speech": "No people found with that name. Please try again. ",
-      "source": "webhook",
-      "displayText": "No people found with that name. Please try again. ",
+      "speech": "People Response",
       "messages": [
         {
           "type": 0,
-          "speech": "No people found with that name. Please try again. "
+          "speech": "People Response"
         }
       ]
     },
-    "score": 0.47999998927116394
+    "score": 1
   },
   "status": {
-    "code": 200,
-    "errorType": "success"
+    "code": 206,
+    "errorType": "partial_content",
+    "errorDetails": "Webhook call failed. Error: 500 INTERNAL SERVER ERROR"
   },
   "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
 }
