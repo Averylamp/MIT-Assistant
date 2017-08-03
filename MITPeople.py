@@ -109,7 +109,7 @@ def lookupPerson(req):
     # if len(foundNames) == 1 :
     #     speech = "Found {}.  What would you like to know about them?".format(foundNames[0])
     foundNamesArr = sorted(list(foundNames), key=lambda x: damerau_levenshtein_distance(bestGuessName, x))
-    print(bestGuessName)
+    print("Best guess name - {}".format(bestGuessName))
     print(foundNamesArr)
     if len(foundNamesArr) > 1:
         confirmPerson = False
@@ -118,6 +118,7 @@ def lookupPerson(req):
                 if context.get("ConfirmPerson", False) == True:
                     confirmPerson = True
         if confirmPerson:
+            print("Confirming Person")
             for person in results:
                 if person.get("name","").lower()  == foundNamesArr[0].lower() :
                     personResults = person
@@ -125,6 +126,7 @@ def lookupPerson(req):
             speech += optionsStr
             updateContext(contexts, "FoundPersonContext".lower() , 5, {"foundPerson":results,"foundOptions":options})
         else:
+            print("Listing possible people")
             speech = "{} results found. ".format(len(foundNamesArr))
             if len(foundNamesArr) > 5:
                 speech += "The first five are: " + getListString(foundNamesArr[:5]) + " "
