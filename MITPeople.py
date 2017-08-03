@@ -239,7 +239,7 @@ def confirmPerson(req):
             personResults = person
             optionsStr, options = choose_person_output(personResults)
             speech = optionsStr
-            updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
+            updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":personResults,"foundOptions":options})
     print("--------- Final Speech ---------")
     print(speech)
     return {
@@ -254,7 +254,18 @@ def lookupInformation(req):
     speech =  "Lookup  Person Information"
     contexts = req.get("result").get("contexts")
     parameters = req.get("result").get("parameters")
+    print(parameters)
+    personInfoTypes = parameters.get("PersonInformationType", [])
 
+    for context in contexts:
+        if context.get("name", "").lower()  == "foundpersoncontext".lower()  :
+            foundPersonContext = context
+            print(context)
+
+    if len(personInfoTypes) > 0:
+        speech = ""
+    else:
+        speech = ""
 
     return {
         "speech": speech,
@@ -401,11 +412,6 @@ def handleLookupIntent(intent, old_session):
     print(output)
     return build_response(session, build_speechlet_response("Lookup Person", output, output, should_end_session))
 
-def setSessionValue(session, key, value):
-    session[key] = value
-    # if key in session['attributes']:
-    #     session['attributes'][key] = value
-
 def handleGetInfoIntent(intent, old_session):
     output = ""
     should_end_session = True
@@ -523,210 +529,177 @@ def damerau_levenshtein_distance(s1, s2):
 
 
 test = {
-  "id": "885ee28e-94f7-4148-bbc5-62f60e22ee33",
-  "timestamp": "2017-08-03T09:35:39.243Z",
+  "id": "84db1a4f-33d9-4f8b-9a98-4e8e77350c19",
+  "timestamp": "2017-08-03T09:59:41.739Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "confirm avery lamp",
-    "action": "LookUpPerson.LookUpConfirmation",
+    "resolvedQuery": "department and email",
+    "action": "LookUpPerson.LookUpInformation",
     "actionIncomplete": False,
     "parameters": {
-      "given-name": "",
-      "last-name": ""
+      "PersonInformationType": [
+        "department",
+        "email"
+      ]
     },
     "contexts": [
       {
         "name": "queryresultscontext",
         "parameters": {
-          "given-name.original": "",
-          "last-name.original": "",
+          "PersonInformationType.original": [
+            "department",
+            "email"
+          ],
+          "given-name.original": "arlene",
+          "last-name.original": "grant",
           "foundPeople": [
             {
-              "surname": "Avery",
-              "givenname": "Al",
-              "name": "Al Avery",
-              "id": "aavery",
+              "surname": "Ducao",
+              "givenname": "Arlene",
+              "name": "Arlene Brigoli Ducao",
+              "id": "arlduc",
               "email": [
-                "aavery@mit.edu"
+                "arlduc@mit.edu"
               ],
-              "url": "http://m.mit.edu/apis/people/aavery"
+              "url": "http://m.mit.edu/apis/people/arlduc"
             },
             {
-              "surname": "Avery",
-              "givenname": "Brent A",
-              "name": "Brent A Avery",
-              "dept": "AERONAUTICS AND ASTRONAUTICS",
-              "id": "averybal",
-              "email": [
-                "averybal@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/averybal"
-            },
-            {
-              "surname": "Avery",
-              "givenname": "Cordelia G",
-              "name": "Cordelia G Avery",
-              "dept": "ELECTRICAL ENG & COMPUTER SCI",
-              "id": "cavery",
-              "email": [
-                "cavery@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/cavery"
-            },
-            {
-              "surname": "Avery",
-              "givenname": "Reginald Keith",
-              "name": "Reginald Keith Avery",
-              "dept": "20",
-              "id": "rkavery",
+              "surname": "Grant",
+              "givenname": "Arlene J",
+              "name": "Arlene J Grant",
+              "title": "Dormitory Housekeeper",
+              "dept": "Department of Housing",
+              "id": "arleneg",
               "phone": [
-                "617-253-1998"
+                "617-253-5107"
               ],
               "email": [
-                "rkavery@mit.edu"
+                "arleneg@mit.edu"
               ],
               "office": [
-                "66-165"
+                "W79"
               ],
-              "url": "http://m.mit.edu/apis/people/rkavery"
+              "url": "http://m.mit.edu/apis/people/arleneg"
             },
             {
-              "surname": "Beach",
-              "givenname": "Avery Sarah",
-              "name": "Avery Sarah Beach",
-              "dept": "MANAGEMENT",
-              "id": "abeach",
+              "surname": "Heywood-Dortch",
+              "givenname": "Arlene",
+              "name": "Arlene Heywood-Dortch",
+              "id": "ahdortch",
               "email": [
-                "abeach@mit.edu"
+                "ahdortch@mit.edu"
               ],
-              "url": "http://m.mit.edu/apis/people/abeach"
+              "url": "http://m.mit.edu/apis/people/ahdortch"
             },
             {
-              "surname": "Lamp",
-              "givenname": "Avery B",
-              "name": "Avery B Lamp",
+              "surname": "Siswanto",
+              "givenname": "Arlene E",
+              "name": "Arlene E Siswanto",
               "dept": "ELECTRICAL ENG & COMPUTER SCI",
-              "id": "alamp",
+              "id": "siswanto",
               "email": [
-                "alamp@mit.edu"
+                "siswanto@mit.edu"
               ],
-              "url": "http://m.mit.edu/apis/people/alamp"
+              "url": "http://m.mit.edu/apis/people/siswanto"
             },
             {
-              "surname": "Normandin",
-              "givenname": "Avery",
-              "name": "Avery Normandin",
-              "title": "Technical Associate I",
-              "dept": "Media Laboratory",
-              "id": "ave",
+              "surname": "Wint",
+              "givenname": "Arlene",
+              "name": "Arlene Wint",
+              "title": "Administrative Assistant II",
+              "dept": "Research Laboratory of Electronics",
+              "id": "aewint",
               "phone": [
-                "603-391-1549"
+                "617-324-4349"
               ],
               "email": [
-                "ave@media.mit.edu"
+                "aewint@mit.edu"
               ],
               "office": [
-                "E18-605",
-                "E15-391"
+                "36-872"
               ],
-              "url": "http://m.mit.edu/apis/people/ave"
+              "url": "http://m.mit.edu/apis/people/aewint"
             },
             {
-              "surname": "Nortonsmith",
-              "givenname": "Avery N",
-              "name": "Avery N Nortonsmith",
-              "dept": "ELECTRICAL ENG & COMPUTER SCI",
-              "id": "averyn",
+              "surname": "Wyman",
+              "givenname": "Arlene",
+              "name": "Arlene Wyman",
+              "id": "arlenew",
               "email": [
-                "averyn@mit.edu"
+                "arlenew@mit.edu"
               ],
-              "url": "http://m.mit.edu/apis/people/averyn"
-            },
-            {
-              "surname": "Stroman",
-              "givenname": "Avery J.",
-              "name": "Avery J. Stroman",
-              "title": "Administrative Staff",
-              "dept": "Lincoln Laboratory",
-              "id": "uid=av26971,OU=users,OU=moira,dc=MIT,dc=EDU",
-              "phone": [
-                "781-981-1653"
-              ],
-              "office": [
-                "LL-FA-250"
-              ],
-              "url": "http://m.mit.edu/apis/people/uid=av26971,OU=users,OU=moira,dc=MIT,dc=EDU"
-            },
-            {
-              "surname": "Weidman",
-              "givenname": "Avery",
-              "name": "Avery Weidman",
-              "dept": "MANAGEMENT",
-              "id": "weidman",
-              "email": [
-                "weidman@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/weidman"
+              "url": "http://m.mit.edu/apis/people/arlenew"
             }
           ],
-          "given-name": "",
-          "last-name": ""
-        },
-        "lifespan": 4
-      },
-      {
-        "name": "confirmpersoncontext",
-        "parameters": {
-          "given-name.original": "",
-          "last-name.original": "",
-          "ConfirmPerson": True,
-          "given-name": "",
-          "last-name": ""
+          "given-name": "Arlene",
+          "PersonInformationType": [
+            "department",
+            "email"
+          ],
+          "last-name": "Grant"
         },
         "lifespan": 1
       },
       {
         "name": "current-person",
         "parameters": {
-          "PersonInformationType.original": "",
+          "PersonInformationType.original": [
+            "department",
+            "email"
+          ],
           "Initials.original": "",
-          "given-name.original": "",
-          "last-name.original": "",
-          "given-name": "",
-          "PersonInformationType": "",
+          "given-name.original": "arlene",
+          "last-name.original": "grant",
+          "given-name": "Arlene",
+          "PersonInformationType": [
+            "department",
+            "email"
+          ],
           "Initials": "",
-          "last-name": ""
+          "last-name": "Grant"
         },
-        "lifespan": 9
+        "lifespan": 5
       },
       {
-        "name": "lookupperson-followup",
+        "name": "foundpersoncontext",
         "parameters": {
-          "PersonInformationType.original": "",
-          "Initials.original": "",
-          "given-name.original": "",
-          "last-name.original": "",
-          "given-name": "",
-          "PersonInformationType": "",
-          "Initials": "",
-          "last-name": ""
+          "PersonInformationType.original": [
+            "department",
+            "email"
+          ],
+          "foundPerson": [],
+          "foundOptions": {
+            "title": "Dormitory Housekeeper",
+            "department": "Department of Housing",
+            "kerberos": "arleneg",
+            "phone": "617-253-5107",
+            "email": "arleneg@mit.edu",
+            "office": "W79"
+          },
+          "PersonInformationType": [
+            "department",
+            "email"
+          ]
         },
-        "lifespan": 1
+        "lifespan": 5
       }
     ],
     "metadata": {
-      "intentId": "3310271a-53b3-4748-8c67-5f6b9e477a25",
-      "webhookUsed": "false",
+      "intentId": "15d3cad6-29f8-45e5-8985-300b63136836",
+      "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "intentName": "Look Up Person Confirmation"
+      "webhookResponseTime": 36,
+      "intentName": "LookUpPersonInformation"
     },
     "fulfillment": {
-      "speech": "",
+      "speech": "Lookup  Person Information",
+      "source": "webhook",
+      "displayText": "Lookup  Person Information",
       "messages": [
         {
           "type": 0,
-          "speech": ""
+          "speech": "Lookup  Person Information"
         }
       ]
     },
@@ -738,4 +711,6 @@ test = {
   },
   "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
 }
-confirmPerson(test)
+lookupInformation(test)
+
+
