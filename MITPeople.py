@@ -128,7 +128,6 @@ def lookupPerson(req):
             speech = "{} results found. ".format(len(foundNamesArr))
             if len(foundNamesArr) > 5:
                 speech += "The first five are: " + getListString(foundNamesArr[:5]) + " "
-                for
                 suggestions = suggestions + foundNamesArr[:5].map(lambda x: "Confirm " + x)
             else:
                 speech += "They are: " + getListString(foundNamesArr) + ". "
