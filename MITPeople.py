@@ -151,7 +151,100 @@ def confirmPerson(req):
     contexts = req.get("result").get("contexts")
     parameters = req.get("result").get("parameters")
 
+    fullQuery = req.get("result").get("resolvedQuery")
+    print("Full Query: {}".format(fullQuery))
+    firstNameFound = False
+    lastNameFound = False
+    initialLetterFound = False
+    personContextFound = False
+    guessedLastNameFound = False
+    for context in contexts:
+        if context.get("name", "") == "current-person" :
+            personContext = context
+            personContextFound = True
+            if personContext.get("parameters", {}).get("given-name", "") != "":
+                firstName = personContext.get("parameters", {}).get("given-name", "")
+                firstNameFound = True
+                print("First Name Found - {}".format(firstName))
+            if personContext.get("parameters", {}).get("last-name", "") != "":
+                lastName = personContext.get("parameters", {}).get("last-name", "")
+                lastNameFound = True
+                print("Last Name Found - {}".format(lastName))
+            if personContext.get("parameters", {}).get("Initials", "") != "":
+                initialLetterFound = personContext.get("parameters", {}).get("Initials", "")
+                initialFound = True
+                print("Initial Found - {}".format(initialLetterFound))
+            personContext["test"] = {"hello": "there"}
+    if parameters.get("given-name", "") != "":
+        firstName = parameters.get("given-name", "")
+        firstNameFound = True
+    if parameters.get("last-name", "") != "":
+        lastName = parameters.get("last-name", "")
+        lastNameFound = True
+    if parameters.get("Initials", "") != "":
+        initialLetter = parameters.get("Initials", "")
+        initialLetterFound = True
 
+    if firstNameFound and not lastNameFound and not initialLetterFound:
+        allQueryWords = str(fullQuery).lower().split(" ")
+        for i in range(len(allQueryWords)):
+            if allQueryWords[i] == firstName.lower() and i < len(allQueryWords) - 1:
+                guessedLastName = allQueryWords[i + 1]
+                guessedLastNameFound = True
+                print("Guessed Last Name Found - {}".format(guessedLastName))
+
+    bestGuessFormat = []
+    foundIDs = set()
+    foundNames = set()
+    results = []
+    foundResults = False
+    if firstNameFound and (lastNameFound or guessedLastNameFound):
+        if lastNameFound:
+            bestGuessName = "{} {}".format(firstName, lastName)
+        else:
+            bestGuessName = "{} {}".format(firstName, guessedLastName)
+        bestGuessFormat = ['first', 'last']
+        q = lookup_person(bestGuessName)
+        print("{} found - {} result".format(bestGuessName, len(q)))
+        if len(q) >= 1:
+            foundResults = True
+            addToResults(results, q, foundIDs, foundNames)
+
+    if lastNameFound and not foundResults:
+        bestGuessName = "{}".format(lastName)
+        bestGuessFormat = ['last']
+        q = lookup_person(bestGuessName)
+        print("{} found - {} result".format(bestGuessName, len(q)))
+        if len(q) >= 1:
+            foundResults = True
+            addToResults(results, q, foundIDs, foundNames)
+
+    if firstNameFound and not foundResults:
+        if initialLetterFound:
+            bestGuessName = "{} {}".format(firstName, initialLetter)
+        else:
+            bestGuessName = "{}".format(firstName)
+        bestGuessFormat = ['last']
+        q = lookup_person(bestGuessName)
+        print("{} found - {} result".format(bestGuessName, len(q)))
+        if len(q) >= 1:
+            foundResults = True
+            addToResults(results, q, foundIDs, foundNames)       
+    if foundResults == False:
+        speech = "No people found with that name. Please try again. "
+        print("No results found")
+        return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        "contextOut": contexts,
+        "source": "webhook"
+        }
+    print(foundNames)
+    # if len(foundNames) == 1 :
+    #     speech = "Found {}.  What would you like to know about them?".format(foundNames[0])
+    foundNamesArr = sorted(list(foundNames), key=lambda x: damerau_levenshtein_distance(bestGuessName, x))
+    print(bestGuessName)
     return {
         "speech": speech,
         "displayText": speech,
