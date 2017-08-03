@@ -212,7 +212,7 @@ def confirmPerson(req):
         bestGuessFormat = ['last']        
         foundResults = True
 
-    print(bestGuessName)
+    
     if firstNameFound and not foundResults:
         if initialLetterFound:
             bestGuessName = "{} {}".format(firstName, initialLetter)
@@ -221,25 +221,27 @@ def confirmPerson(req):
         bestGuessFormat = ['last']        
         foundResults = True
     if foundResults == False:
-        bestGuessName = fullQuery.lowercase().replace("confirm ", "")
+        bestGuessName = fullQuery.lower().replace("confirm ", "")
+    print("Best Guess Name - {}".format(bestGuessName))
     foundNames = []
     searchResults = None
     for context in contexts:
         if context.get("name", "") == "queryresultscontext" :
-            searchResults = context
-            for item in searchResults.get("foundPeople",[]):
+            searchResults = context["parameters"].get("foundPeople",[])
+            for item in searchResults:
                 name = item.get("name", None)
                 if name is not None:
                     foundNames.append(name)
     foundNamesArr = sorted(foundNames, key=lambda x: damerau_levenshtein_distance(bestGuessName, x))
-    
+    print(foundNamesArr)
     for person in searchResults:
         if person.get("name","") == foundNamesArr[0]:
             personResults = person
-        optionsStr, options = choose_person_output(personResults)
-        speech += optionsStr
-        updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
-
+            optionsStr, options = choose_person_output(personResults)
+            speech = optionsStr
+            updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
+    print("--------- Final Speech ---------")
+    print(speech)
     
     return {
         "speech": speech,
@@ -522,65 +524,210 @@ def damerau_levenshtein_distance(s1, s2):
 
 
 test = {
-  "id": "0ad247c6-0993-4349-aff0-6e6e86ed8826",
-  "timestamp": "2017-08-03T07:45:03.045Z",
+  "id": "885ee28e-94f7-4148-bbc5-62f60e22ee33",
+  "timestamp": "2017-08-03T09:35:39.243Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "look up avery",
-    "action": "LookUpPerson",
+    "resolvedQuery": "confirm avery lamp",
+    "action": "LookUpPerson.LookUpConfirmation",
     "actionIncomplete": False,
     "parameters": {
-      "given-name": "Avery",
-      "Initials": "",
-      "last-name": "",
-      "PersonInformationType": ""
+      "given-name": "",
+      "last-name": ""
     },
     "contexts": [
+      {
+        "name": "queryresultscontext",
+        "parameters": {
+          "given-name.original": "",
+          "last-name.original": "",
+          "foundPeople": [
+            {
+              "surname": "Avery",
+              "givenname": "Al",
+              "name": "Al Avery",
+              "id": "aavery",
+              "email": [
+                "aavery@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/aavery"
+            },
+            {
+              "surname": "Avery",
+              "givenname": "Brent A",
+              "name": "Brent A Avery",
+              "dept": "AERONAUTICS AND ASTRONAUTICS",
+              "id": "averybal",
+              "email": [
+                "averybal@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/averybal"
+            },
+            {
+              "surname": "Avery",
+              "givenname": "Cordelia G",
+              "name": "Cordelia G Avery",
+              "dept": "ELECTRICAL ENG & COMPUTER SCI",
+              "id": "cavery",
+              "email": [
+                "cavery@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/cavery"
+            },
+            {
+              "surname": "Avery",
+              "givenname": "Reginald Keith",
+              "name": "Reginald Keith Avery",
+              "dept": "20",
+              "id": "rkavery",
+              "phone": [
+                "617-253-1998"
+              ],
+              "email": [
+                "rkavery@mit.edu"
+              ],
+              "office": [
+                "66-165"
+              ],
+              "url": "http://m.mit.edu/apis/people/rkavery"
+            },
+            {
+              "surname": "Beach",
+              "givenname": "Avery Sarah",
+              "name": "Avery Sarah Beach",
+              "dept": "MANAGEMENT",
+              "id": "abeach",
+              "email": [
+                "abeach@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/abeach"
+            },
+            {
+              "surname": "Lamp",
+              "givenname": "Avery B",
+              "name": "Avery B Lamp",
+              "dept": "ELECTRICAL ENG & COMPUTER SCI",
+              "id": "alamp",
+              "email": [
+                "alamp@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/alamp"
+            },
+            {
+              "surname": "Normandin",
+              "givenname": "Avery",
+              "name": "Avery Normandin",
+              "title": "Technical Associate I",
+              "dept": "Media Laboratory",
+              "id": "ave",
+              "phone": [
+                "603-391-1549"
+              ],
+              "email": [
+                "ave@media.mit.edu"
+              ],
+              "office": [
+                "E18-605",
+                "E15-391"
+              ],
+              "url": "http://m.mit.edu/apis/people/ave"
+            },
+            {
+              "surname": "Nortonsmith",
+              "givenname": "Avery N",
+              "name": "Avery N Nortonsmith",
+              "dept": "ELECTRICAL ENG & COMPUTER SCI",
+              "id": "averyn",
+              "email": [
+                "averyn@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/averyn"
+            },
+            {
+              "surname": "Stroman",
+              "givenname": "Avery J.",
+              "name": "Avery J. Stroman",
+              "title": "Administrative Staff",
+              "dept": "Lincoln Laboratory",
+              "id": "uid=av26971,OU=users,OU=moira,dc=MIT,dc=EDU",
+              "phone": [
+                "781-981-1653"
+              ],
+              "office": [
+                "LL-FA-250"
+              ],
+              "url": "http://m.mit.edu/apis/people/uid=av26971,OU=users,OU=moira,dc=MIT,dc=EDU"
+            },
+            {
+              "surname": "Weidman",
+              "givenname": "Avery",
+              "name": "Avery Weidman",
+              "dept": "MANAGEMENT",
+              "id": "weidman",
+              "email": [
+                "weidman@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/weidman"
+            }
+          ],
+          "given-name": "",
+          "last-name": ""
+        },
+        "lifespan": 4
+      },
+      {
+        "name": "confirmpersoncontext",
+        "parameters": {
+          "given-name.original": "",
+          "last-name.original": "",
+          "ConfirmPerson": True,
+          "given-name": "",
+          "last-name": ""
+        },
+        "lifespan": 1
+      },
       {
         "name": "current-person",
         "parameters": {
           "PersonInformationType.original": "",
           "Initials.original": "",
-          "given-name.original": "avery",
+          "given-name.original": "",
           "last-name.original": "",
-          "given-name": "Avery",
+          "given-name": "",
           "PersonInformationType": "",
           "Initials": "",
           "last-name": ""
         },
-        "lifespan": 10
+        "lifespan": 9
       },
       {
         "name": "lookupperson-followup",
         "parameters": {
           "PersonInformationType.original": "",
           "Initials.original": "",
-          "given-name.original": "avery",
+          "given-name.original": "",
           "last-name.original": "",
-          "given-name": "Avery",
+          "given-name": "",
           "PersonInformationType": "",
           "Initials": "",
           "last-name": ""
         },
-        "lifespan": 2
+        "lifespan": 1
       }
     ],
     "metadata": {
-      "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
-      "webhookUsed": "true",
+      "intentId": "3310271a-53b3-4748-8c67-5f6b9e477a25",
+      "webhookUsed": "false",
       "webhookForSlotFillingUsed": "false",
-      "webhookResponseTime": 45,
-      "intentName": "Look Up Person"
+      "intentName": "Look Up Person Confirmation"
     },
     "fulfillment": {
-      "speech": "Lookup  Person Information",
-      "source": "webhook",
-      "displayText": "Lookup  Person Information",
+      "speech": "",
       "messages": [
         {
           "type": 0,
-          "speech": "Lookup  Person Information"
+          "speech": ""
         }
       ]
     },
@@ -592,4 +739,4 @@ test = {
   },
   "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
 }
-lookupPerson(test)
+confirmPerson(test)
