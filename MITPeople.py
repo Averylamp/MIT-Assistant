@@ -204,47 +204,43 @@ def confirmPerson(req):
         else:
             bestGuessName = "{} {}".format(firstName, guessedLastName)
         bestGuessFormat = ['first', 'last']
-        q = lookup_person(bestGuessName)
-        print("{} found - {} result".format(bestGuessName, len(q)))
-        if len(q) >= 1:
-            foundResults = True
-            addToResults(results, q, foundIDs, foundNames)
+        foundResults = True
+
 
     if lastNameFound and not foundResults:
         bestGuessName = "{}".format(lastName)
-        bestGuessFormat = ['last']
-        q = lookup_person(bestGuessName)
-        print("{} found - {} result".format(bestGuessName, len(q)))
-        if len(q) >= 1:
-            foundResults = True
-            addToResults(results, q, foundIDs, foundNames)
+        bestGuessFormat = ['last']        
+        foundResults = True
 
+    print(bestGuessName)
     if firstNameFound and not foundResults:
         if initialLetterFound:
             bestGuessName = "{} {}".format(firstName, initialLetter)
         else:
             bestGuessName = "{}".format(firstName)
-        bestGuessFormat = ['last']
-        q = lookup_person(bestGuessName)
-        print("{} found - {} result".format(bestGuessName, len(q)))
-        if len(q) >= 1:
-            foundResults = True
-            addToResults(results, q, foundIDs, foundNames)       
+        bestGuessFormat = ['last']        
+        foundResults = True
     if foundResults == False:
-        speech = "No people found with that name. Please try again. "
-        print("No results found")
-        return {
-        "speech": speech,
-        "displayText": speech,
-        # "data": data,
-        "contextOut": contexts,
-        "source": "webhook"
-        }
-    print(foundNames)
-    # if len(foundNames) == 1 :
-    #     speech = "Found {}.  What would you like to know about them?".format(foundNames[0])
-    foundNamesArr = sorted(list(foundNames), key=lambda x: damerau_levenshtein_distance(bestGuessName, x))
-    print(bestGuessName)
+        bestGuessName = fullQuery.lowercase().replace("confirm ", "")
+    foundNames = []
+    searchResults = None
+    for context in contexts:
+        if context.get("name", "") == "queryresultscontext" :
+            searchResults = context
+            for item in searchResults.get("foundPeople",[]):
+                name = item.get("name", None)
+                if name is not None:
+                    foundNames.append(name)
+    foundNamesArr = sorted(foundNames, key=lambda x: damerau_levenshtein_distance(bestGuessName, x))
+    
+    for person in searchResults:
+        if person.get("name","") == foundNamesArr[0]:
+            personResults = person
+        optionsStr, options = choose_person_output(personResults)
+        speech += optionsStr
+        updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
+
+    
     return {
         "speech": speech,
         "displayText": speech,
