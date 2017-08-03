@@ -271,6 +271,7 @@ def lookupInformation(req):
     speech =  "Lookup  Person Information"
     contexts = req.get("result").get("contexts")
     parameters = req.get("result").get("parameters")
+    suggestions = []
     print(parameters)
     personInfoTypes = parameters.get("PersonInformationType", [])
     contractions = {"EARTH, ATMOS & PLANETARY SCI": "Earth, Atmosphere, and Planetary Science","Dept of Electrical Engineering & Computer Science":"Department of Electrical Engineering & Computer Science", "ELECTRICAL ENG & COMPUTER SCI":"Electrical Engineering and Computer Science", "20":"Biological engineering", "MATERIALS SCIENCE AND ENG":"Materials Science and Engineering"}
@@ -590,128 +591,74 @@ def addSuggestions(speech = "", suggestions = []):
 
 
 test = {
-  "id": "8dfe8c35-1a88-4892-932a-f471a2fdb727",
-  "timestamp": "2017-08-03T11:39:21.32Z",
+  "id": "03eb8253-590a-4c11-ad98-3dd4f91af21b",
+  "timestamp": "2017-08-03T11:44:09.655Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "department",
-    "action": "LookUpPerson.LookUpInformation",
+    "resolvedQuery": "look up avery lamp",
+    "action": "LookUpPerson",
     "actionIncomplete": False,
     "parameters": {
-      "PersonInformationType": [
-        "department"
-      ]
+      "given-name": "Avery",
+      "Initials": "",
+      "last-name": "",
+      "PersonInformationType": ""
     },
     "contexts": [
       {
-        "name": "queryresultscontext",
-        "parameters": {
-          "PersonInformationType.original": "department",
-          "foundPeople": [
-            {
-              "surname": "Lamp",
-              "givenname": "Avery B",
-              "name": "Avery B Lamp",
-              "dept": "ELECTRICAL ENG & COMPUTER SCI",
-              "id": "alamp",
-              "email": [
-                "alamp@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/alamp"
-            }
-          ],
-          "PersonInformationType": [
-            "department"
-          ]
-        },
-        "lifespan": 4
-      },
-      {
         "name": "current-person",
         "parameters": {
-          "PersonInformationType.original": "department",
+          "PersonInformationType.original": "",
           "Initials.original": "",
-          "given-name.original": "",
+          "given-name.original": "avery",
           "last-name.original": "",
-          "given-name": "",
-          "PersonInformationType": [
-            "department"
-          ],
+          "given-name": "Avery",
+          "PersonInformationType": "",
           "Initials": "",
           "last-name": ""
         },
-        "lifespan": 9
-      },
-      {
-        "name": "foundpersoncontext",
-        "parameters": {
-          "PersonInformationType.original": "department",
-          "foundPerson": [
-            {
-              "surname": "Lamp",
-              "givenname": "Avery B",
-              "name": "Avery B Lamp",
-              "dept": "ELECTRICAL ENG & COMPUTER SCI",
-              "id": "alamp",
-              "email": [
-                "alamp@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/alamp"
-            }
-          ],
-          "foundOptions": {
-            "department": "ELECTRICAL ENG & COMPUTER SCI",
-            "kerberos": "alamp",
-            "email": "alamp@mit.edu"
-          },
-          "PersonInformationType": [
-            "department"
-          ]
-        },
-        "lifespan": 5
+        "lifespan": 10
       },
       {
         "name": "lookupperson-followup",
         "parameters": {
-          "PersonInformationType.original": "department",
+          "PersonInformationType.original": "",
           "Initials.original": "",
-          "given-name.original": "",
+          "given-name.original": "avery",
           "last-name.original": "",
-          "given-name": "",
-          "PersonInformationType": [
-            "department"
-          ],
+          "given-name": "Avery",
+          "PersonInformationType": "",
           "Initials": "",
           "last-name": ""
         },
-        "lifespan": 1
+        "lifespan": 2
       }
     ],
     "metadata": {
-      "intentId": "15d3cad6-29f8-45e5-8985-300b63136836",
+      "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "intentName": "LookUpPersonInformation"
+      "intentName": "Look Up Person"
     },
     "fulfillment": {
-      "speech": "",
+      "speech": "People Response",
       "messages": [
         {
           "type": 0,
-          "speech": ""
+          "speech": "People Response"
         }
       ]
     },
-    "score": 1
+    "score": 0.9599999785423279
   },
   "status": {
     "code": 206,
     "errorType": "partial_content",
-    "errorDetails": "Webhook call failed. Error: 500 INTERNAL SERVER ERROR"
+    "errorDetails": "Webhook call failed. Error message:  ErrorId: 14a3f09e-ff83-47c7-862d-3cf5b7d31334"
   },
   "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
 }
-lookupInformation(test)
+lookupPerson(test)
 
 
