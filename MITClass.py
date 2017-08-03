@@ -33,7 +33,16 @@ def validateResponse(response):
 def lookupClass(req):
     speech =  "Lookup  class"
     contexts = req.get("result").get("contexts")
-
+    fullQuery = req.get("result").get("resolvedQuery")
+    if fullQuery == "Look up a class":
+        speech = "To look up a class, simply say 'Look up class' then the class number."
+        return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        "contextOut": contexts,
+        "source": "webhook"
+        }
     parameters = req.get("result").get("parameters")
     classNumberFound = False
     classContextFound = False

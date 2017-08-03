@@ -9,6 +9,15 @@ def lookupPerson(req):
     suggestions = []
     parameters = req.get("result").get("parameters")
     fullQuery = req.get("result").get("resolvedQuery")
+    if fullQuery == "Look up a person":
+        speech = "To look up a person, simply say 'Look up' then the person's name."
+        return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        "contextOut": contexts,
+        "source": "webhook"
+        }
     print("Full Query: {}".format(fullQuery))
     firstNameFound = False
     lastNameFound = False
