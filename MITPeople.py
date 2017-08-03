@@ -559,10 +559,10 @@ def damerau_levenshtein_distance(s1, s2):
   
 # --------------- Events ------------------
 
-def addSuggestions(suggestions):
+def addSuggestions(suggestions = []):
     return {
    "google":{
-      "expect_user_response":true,
+      "expect_user_response":True,
       "rich_response":{
          "items":[
             {
