@@ -104,12 +104,26 @@ def lookupPerson(req):
     print(bestGuessName)
     print(foundNamesArr)
     if len(foundNamesArr) > 1:
-        speech = "{} results found. ".format(len(foundNamesArr))
-        if len(foundNamesArr) > 5:
-            speech += "The first five are: " + getListString(foundNamesArr[:5]) + ". "
+        confirmPerson = False
+        for context in contexts:
+            if context.get("name", "") == "ConfirmPersonContext":
+                if context.get("ConfirmPerson", False) == True:
+                    confirmPerson = True
+        if confirmPerson:
+            for person in results:
+            if person.get("name","") == foundNamesArr[0]:
+                personResults = person
+            optionsStr, options = choose_person_output(personResults)
+            speech += optionsStr
+            updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
         else:
-            speech += "They are: " + getListString(foundNamesArr) + ". "
-        speech += "To confirm the person you are looking for say their name again"
+            speech = "{} results found. ".format(len(foundNamesArr))
+            if len(foundNamesArr) > 5:
+                speech += "The first five are: " + getListString(foundNamesArr[:5]) + ". "
+            else:
+                speech += "They are: " + getListString(foundNamesArr) + ". "
+            speech += "To confirm the person you are looking for say their full name again"
+            updateContext(contexts, "ConfirmPersonContext", 2, {"ConfirmPerson":True})
     elif len(foundNamesArr) == 1:
         speech = "{} found. ".format(foundNamesArr[0])
         personResults = None
