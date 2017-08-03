@@ -111,8 +111,8 @@ def lookupPerson(req):
                     confirmPerson = True
         if confirmPerson:
             for person in results:
-            if person.get("name","") == foundNamesArr[0]:
-                personResults = person
+                if person.get("name","") == foundNamesArr[0]:
+                    personResults = person
             optionsStr, options = choose_person_output(personResults)
             speech += optionsStr
             updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":results,"foundOptions":options})
