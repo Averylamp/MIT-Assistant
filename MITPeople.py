@@ -124,7 +124,7 @@ def lookupPerson(req):
                     personResults = person
             optionsStr, options = choose_person_output(personResults)
             speech += optionsStr
-            updateContext(contexts, "FoundPersonContext".lower() , 5, {"foundPerson":results,"foundOptions":options})
+            updateContext(contexts, "FoundPersonContext".lower() , 5, {"foundPerson":personResults,"foundOptions":options})
         else:
             print("Listing possible people")
             speech = "{} results found. ".format(len(foundNamesArr))
@@ -145,7 +145,7 @@ def lookupPerson(req):
         optionsStr, options = choose_person_output(personResults)
         suggestions = suggestions + ["all"] + list(options)
         speech += optionsStr
-        updateContext(contexts, "FoundPersonContext".lower() , 5, {"foundPerson":results,"foundOptions":options})
+        updateContext(contexts, "FoundPersonContext".lower() , 5, {"foundPerson":personResults,"foundOptions":options})
 
 
     contexts.append({"name":"QueryResultsContext".lower() , "lifespan":5,"parameters":{"foundPeople":results}})
@@ -590,62 +590,116 @@ def addSuggestions(speech = "", suggestions = []):
 
 
 test = {
-  "id": "3a5f572a-d359-4b9f-88e4-3d2a2de0df69",
-  "timestamp": "2017-08-03T11:30:33.623Z",
+  "id": "8dfe8c35-1a88-4892-932a-f471a2fdb727",
+  "timestamp": "2017-08-03T11:39:21.32Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "look up avery",
-    "action": "LookUpPerson",
+    "resolvedQuery": "department",
+    "action": "LookUpPerson.LookUpInformation",
     "actionIncomplete": False,
     "parameters": {
-      "given-name": "",
-      "Initials": "",
-      "last-name": "Avery",
-      "PersonInformationType": ""
+      "PersonInformationType": [
+        "department"
+      ]
     },
     "contexts": [
       {
+        "name": "queryresultscontext",
+        "parameters": {
+          "PersonInformationType.original": "department",
+          "foundPeople": [
+            {
+              "surname": "Lamp",
+              "givenname": "Avery B",
+              "name": "Avery B Lamp",
+              "dept": "ELECTRICAL ENG & COMPUTER SCI",
+              "id": "alamp",
+              "email": [
+                "alamp@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/alamp"
+            }
+          ],
+          "PersonInformationType": [
+            "department"
+          ]
+        },
+        "lifespan": 4
+      },
+      {
         "name": "current-person",
         "parameters": {
-          "PersonInformationType.original": "",
+          "PersonInformationType.original": "department",
           "Initials.original": "",
           "given-name.original": "",
-          "last-name.original": "avery",
+          "last-name.original": "",
           "given-name": "",
-          "PersonInformationType": "",
+          "PersonInformationType": [
+            "department"
+          ],
           "Initials": "",
-          "last-name": "Avery"
+          "last-name": ""
         },
-        "lifespan": 10
+        "lifespan": 9
+      },
+      {
+        "name": "foundpersoncontext",
+        "parameters": {
+          "PersonInformationType.original": "department",
+          "foundPerson": [
+            {
+              "surname": "Lamp",
+              "givenname": "Avery B",
+              "name": "Avery B Lamp",
+              "dept": "ELECTRICAL ENG & COMPUTER SCI",
+              "id": "alamp",
+              "email": [
+                "alamp@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/alamp"
+            }
+          ],
+          "foundOptions": {
+            "department": "ELECTRICAL ENG & COMPUTER SCI",
+            "kerberos": "alamp",
+            "email": "alamp@mit.edu"
+          },
+          "PersonInformationType": [
+            "department"
+          ]
+        },
+        "lifespan": 5
       },
       {
         "name": "lookupperson-followup",
         "parameters": {
-          "PersonInformationType.original": "",
+          "PersonInformationType.original": "department",
           "Initials.original": "",
           "given-name.original": "",
-          "last-name.original": "avery",
+          "last-name.original": "",
           "given-name": "",
-          "PersonInformationType": "",
+          "PersonInformationType": [
+            "department"
+          ],
           "Initials": "",
-          "last-name": "Avery"
+          "last-name": ""
         },
-        "lifespan": 2
+        "lifespan": 1
       }
     ],
     "metadata": {
-      "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
+      "intentId": "15d3cad6-29f8-45e5-8985-300b63136836",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "intentName": "Look Up Person"
+      "intentName": "LookUpPersonInformation"
     },
     "fulfillment": {
-      "speech": "People Response",
+      "speech": "",
       "messages": [
         {
           "type": 0,
-          "speech": "People Response"
+          "speech": ""
         }
       ]
     },
@@ -658,6 +712,6 @@ test = {
   },
   "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
 }
-lookupPerson(test)
+lookupInformation(test)
 
 
