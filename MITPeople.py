@@ -117,6 +117,7 @@ def lookupPerson(req):
 
 
     contexts.append({"name":"QueryResultsContext", "lifespan":5,"parameters":{"foundPeople":results}})
+    print("----------- Final response -------------")
     print(speech)
     return {
         "speech": speech,
@@ -398,8 +399,8 @@ def damerau_levenshtein_distance(s1, s2):
 
 
 test = {
-  "id": "3028d961-d7b1-4b22-8429-031cb53eb3d1",
-  "timestamp": "2017-08-03T07:37:02.416Z",
+  "id": "0ad247c6-0993-4349-aff0-6e6e86ed8826",
+  "timestamp": "2017-08-03T07:45:03.045Z",
   "lang": "en",
   "result": {
     "source": "agent",
@@ -446,17 +447,17 @@ test = {
       "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "webhookResponseTime": 82,
+      "webhookResponseTime": 45,
       "intentName": "Look Up Person"
     },
     "fulfillment": {
-      "speech": "Unable to proccess the request.  Try again later please.",
+      "speech": "Lookup  Person Information",
       "source": "webhook",
-      "displayText": "Unable to proccess the request.  Try again later please.",
+      "displayText": "Lookup  Person Information",
       "messages": [
         {
           "type": 0,
-          "speech": "Unable to proccess the request.  Try again later please."
+          "speech": "Lookup  Person Information"
         }
       ]
     },
