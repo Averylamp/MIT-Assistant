@@ -146,10 +146,11 @@ def lookupPerson(req):
     contexts.append({"name":"QueryResultsContext".lower() , "lifespan":5,"parameters":{"foundPeople":results}})
     print("----------- Final response -------------")
     print(speech)
+    data = addSuggestions()
     return {
         "speech": speech,
         "displayText": speech,
-        # "data": data,
+        "data": data,
         "contextOut": contexts,
         "source": "webhook"
     }
@@ -250,10 +251,11 @@ def confirmPerson(req):
             updateContext(contexts, "FoundPersonContext", 5, {"foundPerson":personResults,"foundOptions":options})
     print("--------- Final Speech ---------")
     print(speech)
+    data =  addSuggestions
     return {
         "speech": speech,
         "displayText": speech,
-        # "data": data,
+        "data": data,
         "contextOut": contexts,
         "source": "webhook"
     }
@@ -293,10 +295,11 @@ def lookupInformation(req):
         speech = "Sorry, I am unable to determine information to retrieve."
     print("----------- Final response -------------")
     print(speech)
+    data = addSuggestions()
     return {
         "speech": speech,
         "displayText": speech,
-        # "data": data,
+        "data": data,
         "contextOut": contexts,
         "source": "webhook"
     }
@@ -556,6 +559,36 @@ def damerau_levenshtein_distance(s1, s2):
   
 # --------------- Events ------------------
 
+def addSuggestions(suggestions):
+    return {
+   "google":{
+      "expect_user_response":true,
+      "rich_response":{
+         "items":[
+            {
+               "simpleResponse":{
+                  "textToSpeech":"This is the 2nd simple response ",
+                  "displayText":"This is the 2nd simple response"
+               }
+            }
+         ],
+         "suggestions":[
+            {
+               "title":"Basic Card"
+            },
+            {
+               "title":"List"
+            },
+            {
+               "title":"Carousel"
+            },
+            {
+               "title":"Suggestions"
+            }
+         ]
+      }
+   }
+}
 
 
 test = {
