@@ -398,12 +398,12 @@ def damerau_levenshtein_distance(s1, s2):
 
 
 test = {
-  "id": "bb48dab0-b984-4089-82ea-b24334baae65",
-  "timestamp": "2017-08-01T21:01:34.299Z",
+  "id": "6a64d119-d86e-43ea-89a2-69860bcd9d71",
+  "timestamp": "2017-08-03T07:34:29.156Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "look up Avery Lamp",
+    "resolvedQuery": "look up avery",
     "action": "LookUpPerson",
     "actionIncomplete": False,
     "parameters": {
@@ -418,7 +418,7 @@ test = {
         "parameters": {
           "PersonInformationType.original": "",
           "Initials.original": "",
-          "given-name.original": "Avery",
+          "given-name.original": "avery",
           "last-name.original": "",
           "given-name": "Avery",
           "PersonInformationType": "",
@@ -432,7 +432,7 @@ test = {
         "parameters": {
           "PersonInformationType.original": "",
           "Initials.original": "",
-          "given-name.original": "Avery",
+          "given-name.original": "avery",
           "last-name.original": "",
           "given-name": "Avery",
           "PersonInformationType": "",
@@ -446,7 +446,7 @@ test = {
       "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "webhookResponseTime": 174,
+      "webhookResponseTime": 43,
       "intentName": "Look Up Person"
     },
     "fulfillment": {
@@ -460,7 +460,7 @@ test = {
         }
       ]
     },
-    "score": 0.9599999785423279
+    "score": 1
   },
   "status": {
     "code": 200,
