@@ -26,7 +26,8 @@ def getClassInfo(classnum):
     return r
 
 def validateResponse(response):
-    if 'errorDesc' in response or 'StackTrace' in response:
+    print("Validating Response")
+    if 'errorDesc' in response or 'StackTrace' in response or 'errorMessage' in response:
         return True
     return False
 
@@ -116,7 +117,8 @@ def lookupClass(req):
             speech = "To get the {} of a class, just let us know the class.".format(classInfoType.lowercase())
         else:
             speech = "You can find the name, instructors, longer description, or number of units of a class.  Just ask away!"
-
+    print("------ Final Speech -------")
+    print(speech)
     return {
         "speech": speech,
         "displayText": speech,
@@ -227,4 +229,65 @@ def getRoomNumber(class_name):
         loc_time.append(lec)
 
     return str(lectures[0]['location'])
-
+test = {
+  "id": "6206af22-566c-4c50-9119-b9f218ffdc8a",
+  "timestamp": "2017-08-04T01:12:15.965Z",
+  "lang": "en",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "look up class 183",
+    "action": "LookUpClass",
+    "actionIncomplete": False,
+    "parameters": {
+      "ClassInfoTypes": "",
+      "number": "183"
+    },
+    "contexts": [
+      {
+        "name": "lookupclass-followup",
+        "parameters": {
+          "number": "183",
+          "number.original": "183",
+          "ClassInfoTypes": "",
+          "ClassInfoTypes.original": ""
+        },
+        "lifespan": 2
+      },
+      {
+        "name": "class-number-found",
+        "parameters": {
+          "number": "183",
+          "number.original": "183",
+          "ClassInfoTypes": "",
+          "ClassInfoTypes.original": ""
+        },
+        "lifespan": 5
+      }
+    ],
+    "metadata": {
+      "intentId": "6348c5a5-3b25-492b-b9fe-a898d4b12fa0",
+      "webhookUsed": "true",
+      "webhookForSlotFillingUsed": "false",
+      "webhookResponseTime": 720,
+      "intentName": "Look Up Class"
+    },
+    "fulfillment": {
+      "speech": "You can find the name, instructors, longer description, or number of units for the class 183.  Just ask away!",
+      "source": "webhook",
+      "displayText": "You can find the name, instructors, longer description, or number of units for the class 183.  Just ask away!",
+      "messages": [
+        {
+          "type": 0,
+          "speech": "You can find the name, instructors, longer description, or number of units for the class 183.  Just ask away!"
+        }
+      ]
+    },
+    "score": 1
+  },
+  "status": {
+    "code": 200,
+    "errorType": "success"
+  },
+  "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
+}
+lookupClass(test)

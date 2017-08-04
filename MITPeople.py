@@ -87,7 +87,7 @@ def lookupPerson(req):
 
     if firstNameFound and not foundResults:
         if initialLetterFound:
-            bestGuessName = "{} {}".format(firstName, initialLetter)
+            bestGuessName = "{} {}".format(firstName, initialLetterFound)
         else:
             bestGuessName = "{}".format(firstName)
         bestGuessFormat = ['last']
@@ -239,7 +239,7 @@ def confirmPerson(req):
     
     if firstNameFound and not foundResults:
         if initialLetterFound:
-            bestGuessName = "{} {}".format(firstName, initialLetter)
+            bestGuessName = "{} {}".format(firstName, initialLetterFound)
         else:
             bestGuessName = "{}".format(firstName)
         bestGuessFormat = ['last']        
@@ -298,7 +298,10 @@ def lookupInformation(req):
             speech = "Here is all of " + foundPersonName + "'s information: Their "
             personInfoTypes = list(foundOptions.keys())
         else:
-            speech = "Here is " + foundPersonName + "'s information: Their "
+            if len(personInfoTypes) == 1:
+                speech = foundPersonName + "'s "
+            else:
+                speech = "Here is " + foundPersonName + "'s information: Their "
         print(personInfoTypes)
         addedItems = []
         for infoOption in personInfoTypes:
@@ -600,74 +603,203 @@ def addSuggestions(speech = "", suggestions = []):
 
 
 test = {
-  "id": "03eb8253-590a-4c11-ad98-3dd4f91af21b",
-  "timestamp": "2017-08-03T11:44:09.655Z",
+  "id": "14ed81bf-526c-4056-80cd-2059e35ecd36",
+  "timestamp": "2017-08-04T01:03:30.634Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "look up avery lamp",
-    "action": "LookUpPerson",
+    "resolvedQuery": "confirm sam ihns",
+    "action": "LookUpPerson.LookUpConfirmation",
     "actionIncomplete": False,
     "parameters": {
-      "given-name": "Avery",
-      "Initials": "",
-      "last-name": "",
-      "PersonInformationType": ""
+      "given-name": "Sam",
+      "last-name": ""
     },
     "contexts": [
+      {
+        "name": "queryresultscontext",
+        "parameters": {
+          "Initials.original": "i",
+          "PersonInformationType.original": "",
+          "given-name.original": "sam",
+          "last-name.original": "",
+          "foundPeople": [
+            {
+              "surname": "Etkind",
+              "givenname": "Samuel Isaac",
+              "name": "Samuel Isaac Etkind",
+              "dept": "CHEMISTRY",
+              "id": "sietkind",
+              "email": [
+                "sietkind@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/sietkind"
+            },
+            {
+              "surname": "Grondahl",
+              "givenname": "Samuel Isaac",
+              "name": "Samuel Isaac Grondahl",
+              "dept": "ECONOMICS",
+              "id": "grondahl",
+              "email": [
+                "grondahl@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/grondahl"
+            },
+            {
+              "surname": "Ihns",
+              "givenname": "Samuel H",
+              "name": "Samuel H Ihns",
+              "id": "samihns",
+              "email": [
+                "samihns@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/samihns"
+            },
+            {
+              "surname": "Ingersoll",
+              "givenname": "Samuel Tenzin Alexander",
+              "name": "Samuel Tenzin Alexander Ingersoll",
+              "title": "Research Affiliate",
+              "dept": "Department of Mechanical Engineering",
+              "id": "saming",
+              "email": [
+                "saming@mit.edu"
+              ],
+              "office": [
+                "5-017"
+              ],
+              "url": "http://m.mit.edu/apis/people/saming"
+            },
+            {
+              "surname": "Inman",
+              "givenname": "Samuel J",
+              "name": "Samuel J Inman",
+              "id": "samueli",
+              "email": [
+                "samueli@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/samueli"
+            },
+            {
+              "surname": "Wald",
+              "givenname": "Samuel Isaac",
+              "name": "Samuel Isaac Wald",
+              "dept": "AERONAUTICS AND ASTRONAUTICS",
+              "id": "swald",
+              "email": [
+                "swald@mit.edu"
+              ],
+              "url": "http://m.mit.edu/apis/people/swald"
+            }
+          ],
+          "given-name": "Sam",
+          "Initials": "i",
+          "PersonInformationType": "",
+          "last-name": ""
+        },
+        "lifespan": 5
+      },
+      {
+        "name": "confirmpersoncontext",
+        "parameters": {
+          "given-name.original": "sam",
+          "last-name.original": "",
+          "ConfirmPerson": True,
+          "given-name": "Sam",
+          "last-name": ""
+        },
+        "lifespan": 1
+      },
       {
         "name": "current-person",
         "parameters": {
           "PersonInformationType.original": "",
-          "Initials.original": "",
-          "given-name.original": "avery",
+          "Initials.original": "i",
+          "given-name.original": "sam",
           "last-name.original": "",
-          "given-name": "Avery",
+          "given-name": "Sam",
           "PersonInformationType": "",
-          "Initials": "",
+          "Initials": "i",
           "last-name": ""
         },
-        "lifespan": 10
+        "lifespan": 9
+      },
+      {
+        "name": "foundpersoncontext",
+        "parameters": {
+          "Initials.original": "i",
+          "given-name.original": "sam",
+          "PersonInformationType.original": "",
+          "last-name.original": "",
+          "foundPerson": {
+            "surname": "Ford",
+            "givenname": "Samuel Earl",
+            "name": "Sam Ford",
+            "title": "Research Affiliate",
+            "dept": "Comparative Media Studies/Writing",
+            "id": "samford",
+            "website": [
+              "http://www.fastcompany.com/user/sam-ford-0"
+            ],
+            "email": [
+              "samford@mit.edu"
+            ],
+            "url": "http://m.mit.edu/apis/people/samford"
+          },
+          "foundOptions": {
+            "title": "Research Affiliate",
+            "department": "Comparative Media Studies/Writing",
+            "kerberos": "samford",
+            "email": "samford@mit.edu",
+            "website": "http://www.fastcompany.com/user/sam-ford-0"
+          },
+          "given-name": "Sam",
+          "Initials": "i",
+          "PersonInformationType": "",
+          "last-name": ""
+        },
+        "lifespan": 3
       },
       {
         "name": "lookupperson-followup",
         "parameters": {
           "PersonInformationType.original": "",
-          "Initials.original": "",
-          "given-name.original": "avery",
+          "Initials.original": "i",
+          "given-name.original": "sam",
           "last-name.original": "",
-          "given-name": "Avery",
+          "given-name": "Sam",
           "PersonInformationType": "",
-          "Initials": "",
+          "Initials": "i",
           "last-name": ""
         },
-        "lifespan": 2
+        "lifespan": 1
       }
     ],
     "metadata": {
-      "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
+      "intentId": "3310271a-53b3-4748-8c67-5f6b9e477a25",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "intentName": "Look Up Person"
+      "intentName": "Look Up Person Confirmation"
     },
     "fulfillment": {
-      "speech": "People Response",
+      "speech": "",
       "messages": [
         {
           "type": 0,
-          "speech": "People Response"
+          "speech": ""
         }
       ]
     },
-    "score": 0.9599999785423279
+    "score": 1
   },
   "status": {
     "code": 206,
     "errorType": "partial_content",
-    "errorDetails": "Webhook call failed. Error message:  ErrorId: 14a3f09e-ff83-47c7-862d-3cf5b7d31334"
+    "errorDetails": "Webhook call failed. Error: 500 INTERNAL SERVER ERROR"
   },
   "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
 }
-lookupPerson(test)
+confirmPerson(test)
 
 
