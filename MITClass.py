@@ -12,6 +12,26 @@ import requests
 import json
 import datetime
 
+def addSuggestions(speech = "", suggestions = []):
+    suggestionsTitles = []
+    for item in suggestions:
+        suggestionsTitles.append({"title":item})
+    return {
+   "google":{
+      "expect_user_response":True,
+      "rich_response":{
+         "items":[
+            {
+               "simpleResponse":{
+                  "textToSpeech":speech,
+                  "displayText":speech
+               }
+            }
+         ],
+         "suggestions": suggestionsTitles
+      }
+   }
+}
 
 def getClassInfo(classnum):
     print("Finding class - {}".format(classnum))
@@ -35,6 +55,7 @@ def lookupClass(req):
     speech =  "Lookup  class"
     contexts = req.get("result").get("contexts")
     fullQuery = req.get("result").get("resolvedQuery")
+    suggestions = []
     if fullQuery == "Look up a class":
         speech = "To look up a class, simply say 'Look up class' then the class number."
         return {
@@ -110,8 +131,10 @@ def lookupClass(req):
             r = getClassInfo(classNumber)
             if validateResponse(r.json()):
                 speech = "{} could not be found as a class.  You can find the name, instructors, longer description, or number of units for a different class.  Just ask away!".format(classNumber)
+                suggestions = ["Look up a class", "Look up a person"]
             else:
                 speech = "You can find the name, instructors, longer description, or number of units for the class {}.  Just ask away!".format(classNumber)
+                suggestions = ["name", "instructors", "longer description", "number of units"]
     else:
         if classInfoFound:
             speech = "To get the {} of a class, just let us know the class.".format(classInfoType.lowercase())
@@ -119,10 +142,11 @@ def lookupClass(req):
             speech = "You can find the name, instructors, longer description, or number of units of a class.  Just ask away!"
     print("------ Final Speech -------")
     print(speech)
+    data = addSuggestions(speech, suggestions)
     return {
         "speech": speech,
         "displayText": speech,
-        # "data": data,
+        "data": data,
         "contextOut": contexts,
         "source": "webhook"
     }
