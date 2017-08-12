@@ -800,6 +800,6 @@ test = {
   },
   "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
 }
-confirmPerson(test)
+# confirmPerson(test)
 
 
