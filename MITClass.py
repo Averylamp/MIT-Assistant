@@ -127,6 +127,7 @@ def lookupClass(req):
                     speech = "{} is located in {}.".format(getSubjTitle(classNumber), q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
+            suggestions = ["name", "instructors", "longer description", "number of units"]
         else:
             r = getClassInfo(classNumber)
             if validateResponse(r.json()):
