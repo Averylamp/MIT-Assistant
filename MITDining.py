@@ -11,7 +11,7 @@ def handle_dining_intent(req):
     diningHalls = parameters.get("Dining_Hall", [])
     diningTimes = parameters.get("Dining_Times", "")
     print(lookup_dining_option(diningHalls, diningTimes))
-    speech = lookup_dining_option(diningHalls, diningTimes)
+    speech = lookup_dining_option(diningHalls, diningTimes, suggestions)
 
     print(fullQuery)
 
@@ -40,10 +40,11 @@ def dining_options():
             options.append(diningOption.get("short_name", ""))
     return options
 
-
-def lookup_dining_option(dining_halls, dining_meal = ""):
+print(dining_options())
+def lookup_dining_option(dining_halls, dining_meal = "", suggestions = []):
     print("Looking up dining halls {}".format(dining_halls))
     if len(dining_halls) < 1:
+        suggestions = dining_options()
         return "Please specify which dining hall you would like to get meals for. Choose one of {}".format(getListString(dining_options(), None, "or"))
     else:
         print("Dining hall selected")
