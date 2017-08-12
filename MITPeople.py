@@ -258,6 +258,9 @@ def confirmPerson(req):
                     foundNames.append(name)
     foundNamesArr = sorted(foundNames, key=lambda x: damerau_levenshtein_distance(bestGuessName, x))
     print(foundNamesArr)
+    if searchResults is None:
+        searchResults = []
+        speech = "Could not find that person, please try looking them up again."
     for person in searchResults:
         if person.get("name","").lower()  == foundNamesArr[0].lower() :
             personResults = person
@@ -603,203 +606,74 @@ def addSuggestions(speech = "", suggestions = []):
 
 
 test = {
-  "id": "14ed81bf-526c-4056-80cd-2059e35ecd36",
-  "timestamp": "2017-08-04T01:03:30.634Z",
+  "id": "11ebe497-1a21-4f79-b37b-aa14a50f97ea",
+  "timestamp": "2017-08-12T08:22:08.748Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "confirm sam ihns",
-    "action": "LookUpPerson.LookUpConfirmation",
+    "resolvedQuery": "look up san inish",
+    "action": "LookUpPerson",
     "actionIncomplete": False,
     "parameters": {
-      "given-name": "Sam",
-      "last-name": ""
+      "given-name": "",
+      "Initials": "",
+      "last-name": "",
+      "PersonInformationType": ""
     },
     "contexts": [
-      {
-        "name": "queryresultscontext",
-        "parameters": {
-          "Initials.original": "i",
-          "PersonInformationType.original": "",
-          "given-name.original": "sam",
-          "last-name.original": "",
-          "foundPeople": [
-            {
-              "surname": "Etkind",
-              "givenname": "Samuel Isaac",
-              "name": "Samuel Isaac Etkind",
-              "dept": "CHEMISTRY",
-              "id": "sietkind",
-              "email": [
-                "sietkind@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/sietkind"
-            },
-            {
-              "surname": "Grondahl",
-              "givenname": "Samuel Isaac",
-              "name": "Samuel Isaac Grondahl",
-              "dept": "ECONOMICS",
-              "id": "grondahl",
-              "email": [
-                "grondahl@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/grondahl"
-            },
-            {
-              "surname": "Ihns",
-              "givenname": "Samuel H",
-              "name": "Samuel H Ihns",
-              "id": "samihns",
-              "email": [
-                "samihns@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/samihns"
-            },
-            {
-              "surname": "Ingersoll",
-              "givenname": "Samuel Tenzin Alexander",
-              "name": "Samuel Tenzin Alexander Ingersoll",
-              "title": "Research Affiliate",
-              "dept": "Department of Mechanical Engineering",
-              "id": "saming",
-              "email": [
-                "saming@mit.edu"
-              ],
-              "office": [
-                "5-017"
-              ],
-              "url": "http://m.mit.edu/apis/people/saming"
-            },
-            {
-              "surname": "Inman",
-              "givenname": "Samuel J",
-              "name": "Samuel J Inman",
-              "id": "samueli",
-              "email": [
-                "samueli@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/samueli"
-            },
-            {
-              "surname": "Wald",
-              "givenname": "Samuel Isaac",
-              "name": "Samuel Isaac Wald",
-              "dept": "AERONAUTICS AND ASTRONAUTICS",
-              "id": "swald",
-              "email": [
-                "swald@mit.edu"
-              ],
-              "url": "http://m.mit.edu/apis/people/swald"
-            }
-          ],
-          "given-name": "Sam",
-          "Initials": "i",
-          "PersonInformationType": "",
-          "last-name": ""
-        },
-        "lifespan": 5
-      },
-      {
-        "name": "confirmpersoncontext",
-        "parameters": {
-          "given-name.original": "sam",
-          "last-name.original": "",
-          "ConfirmPerson": True,
-          "given-name": "Sam",
-          "last-name": ""
-        },
-        "lifespan": 1
-      },
       {
         "name": "current-person",
         "parameters": {
           "PersonInformationType.original": "",
-          "Initials.original": "i",
-          "given-name.original": "sam",
+          "Initials.original": "",
+          "given-name.original": "",
           "last-name.original": "",
-          "given-name": "Sam",
+          "given-name": "",
           "PersonInformationType": "",
-          "Initials": "i",
+          "Initials": "",
           "last-name": ""
         },
-        "lifespan": 9
-      },
-      {
-        "name": "foundpersoncontext",
-        "parameters": {
-          "Initials.original": "i",
-          "given-name.original": "sam",
-          "PersonInformationType.original": "",
-          "last-name.original": "",
-          "foundPerson": {
-            "surname": "Ford",
-            "givenname": "Samuel Earl",
-            "name": "Sam Ford",
-            "title": "Research Affiliate",
-            "dept": "Comparative Media Studies/Writing",
-            "id": "samford",
-            "website": [
-              "http://www.fastcompany.com/user/sam-ford-0"
-            ],
-            "email": [
-              "samford@mit.edu"
-            ],
-            "url": "http://m.mit.edu/apis/people/samford"
-          },
-          "foundOptions": {
-            "title": "Research Affiliate",
-            "department": "Comparative Media Studies/Writing",
-            "kerberos": "samford",
-            "email": "samford@mit.edu",
-            "website": "http://www.fastcompany.com/user/sam-ford-0"
-          },
-          "given-name": "Sam",
-          "Initials": "i",
-          "PersonInformationType": "",
-          "last-name": ""
-        },
-        "lifespan": 3
+        "lifespan": 10
       },
       {
         "name": "lookupperson-followup",
         "parameters": {
           "PersonInformationType.original": "",
-          "Initials.original": "i",
-          "given-name.original": "sam",
+          "Initials.original": "",
+          "given-name.original": "",
           "last-name.original": "",
-          "given-name": "Sam",
+          "given-name": "",
           "PersonInformationType": "",
-          "Initials": "i",
+          "Initials": "",
           "last-name": ""
         },
-        "lifespan": 1
+        "lifespan": 2
       }
     ],
     "metadata": {
-      "intentId": "3310271a-53b3-4748-8c67-5f6b9e477a25",
+      "intentId": "48bf15b9-c294-4896-937c-cdd65579e04b",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "intentName": "Look Up Person Confirmation"
+      "intentName": "Look Up Person"
     },
     "fulfillment": {
-      "speech": "",
+      "speech": "People Response",
       "messages": [
         {
           "type": 0,
-          "speech": ""
+          "speech": "People Response"
         }
       ]
     },
-    "score": 1
+    "score": 0.4399999976158142
   },
   "status": {
     "code": 206,
     "errorType": "partial_content",
     "errorDetails": "Webhook call failed. Error: 500 INTERNAL SERVER ERROR"
   },
-  "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
+  "sessionId": "c849e9e7-3c08-45c4-9df6-4a438214aeb9"
 }
-# confirmPerson(test)
+confirmPerson(test)
 
 
