@@ -12,6 +12,7 @@ import json
 import os
 import MITClass
 import MITPeople
+import MITDining
 
 from flask import Flask
 from flask import request
@@ -61,7 +62,7 @@ def processRequest(req):
 		return MITPeople.confirmPerson(req)
 	if req.get("result").get("action") == "LookUpDining":
 		print("Dining Lookup Detected")
-		return lookupClass(req)
+		return MITDining.handle_dining_intent(req)
 	
 	return {
         "speech": "Unable to proccess the request.  Try again later please.",

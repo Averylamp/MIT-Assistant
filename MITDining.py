@@ -8,6 +8,10 @@ def handle_dining_intent(req):
     parameters = req.get("result").get("parameters")
     fullQuery = req.get("result").get("resolvedQuery")
 
+    diningHalls = parameters.get("Dining_Hall", [])
+    diningTimes = parameters.get("Dining_Times", "")
+    print(lookup_dining_option(diningHalls, diningTimes))
+
 
     print(fullQuery)
 
