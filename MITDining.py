@@ -10,6 +10,10 @@ def handle_dining_intent():
 
 
     print(fullQuery)
+
+    
+    data = addSuggestions(speech, suggestions)
+
     return {
         "speech": speech,
         "displayText": speech,
@@ -75,8 +79,26 @@ def lookup_dining_option(dining_halls, dining_meal = ""):
         return output
 
 # print(lookup_dining_option(["Maseeh"]))
-
-
+def addSuggestions(speech = "", suggestions = []):
+    suggestionsTitles = []
+    for item in suggestions:
+        suggestionsTitles.append({"title":item})
+    return {
+   "google":{
+      "expect_user_response":True,
+      "rich_response":{
+         "items":[
+            {
+               "simpleResponse":{
+                  "textToSpeech":speech,
+                  "displayText":speech
+               }
+            }
+         ],
+         "suggestions": suggestionsTitles
+      }
+   }
+}
 def getListString(listName, function = None, conjunction = "and"):
     output = ""
     if len(listName) == 0:
@@ -95,136 +117,4 @@ def getListString(listName, function = None, conjunction = "and"):
             else:
                 output += "{}, ".format(listName[i])
     return output
-
-def handleLookupIntent(intent, old_session):
-    output = ""
-    should_end_session = True
-    session = {}
-    if 'DiningHallName' in intent['slots']:
-        print(intent['slots']['DiningHallName'])
-        diningHallName = intent['slots']['DiningHallName']
-        if 'value' in diningHallName and diningHallName.get("value","") != "" and diningHallName.get("value","")  is not None :
-            diningHall = diningHallName['value']
-            print("Final Dining Hall - {}".format(diningHall))
-        else:
-            output = "Invalid Dining Hall, please try again with a valid dining hall like 'Baker', 'Maseeh', or 'Simmons'"
-            should_end_session = False
-            return build_response(session, build_speechlet_response("Lookup Dining Information", output, output, should_end_session))
-        mealNameDict = intent['slots'].get("MealName",{})
-        mealName = ""
-        if mealNameDict != {}:
-            mealName = mealNameDict.get("value", "")
-        lookup_results = lookup_dining_option([diningHall], mealName)
-        output = lookup_results
-    return build_response(session, build_speechlet_response("Lookup Dining Information", output, output, should_end_session))
-
-# print(lookup_dining())
-
-# def damerau_levenshtein_distance(s1, s2):
-#     d = {}
-#     lenstr1 = len(s1)
-#     lenstr2 = len(s2)
-#     for i in range(-1,lenstr1+1):
-#         d[(i,-1)] = i+1
-#     for j in range(-1,lenstr2+1):
-#         d[(-1,j)] = j+1
-
-#     for i in range(lenstr1):
-#         for j in range(lenstr2):
-#             if s1[i] == s2[j]:
-#                 cost = 0
-#             else:
-#                 cost = 1
-#             d[(i,j)] = min(
-#                            d[(i-1,j)] + 1, # deletion
-#                            d[(i,j-1)] + 1, # insertion
-#                            d[(i-1,j-1)] + cost, # substitution
-#                           )
-#             if i and j and s1[i]==s2[j-1] and s1[i-1] == s2[j]:
-#                 d[(i,j)] = min (d[(i,j)], d[i-2,j-2] + cost) # transposition
-#     return d[lenstr1-1,lenstr2-1]
-
-
-
-
-# --------------- Events ------------------
-
-def on_session_started(session_started_request, session):
-    """ Called when the session starts """
-
-    print("on_session_started requestId=" + session_started_request['requestId']
-          + ", sessionId=" + session['sessionId'])
-
-
-def on_launch(launch_request, session):
-    """ Called when the user launches the skill without specifying what they
-    want
-    """
-
-    print("on_launch requestId=" + launch_request['requestId'] +
-          ", sessionId=" + session['sessionId'])
-    # Dispatch to your skill's launch
-    return get_welcome_response()
-
-
-def on_intent(intent_request, session):
-    """ Called when the user specifies an intent for this skill """
-
-    print("on_intent requestId=" + intent_request['requestId'] +
-          ", sessionId=" + session['sessionId'])
-
-    intent = intent_request['intent']
-    intent_name = intent_request['intent']['name']
-    r = requests.get("http://google.com")
-    
-    # Dispatch to your skill's intent handlers
-    if intent_name == "GetInformation":
-        print("Get information intent detected")
-        return handleLookupIntent(intent, session)
-    elif intent_name == "AMAZON.HelpIntent":
-        return get_welcome_response()
-    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
-        return handle_session_end_request()
-    else:
-        raise ValueError("Invalid intent")
-
-
-def on_session_ended(session_ended_request, session):
-    """ Called when the user ends the session. 
-
-    Is not called when the skill returns should_end_session=true
-    """
-    print("on_session_ended requestId=" + session_ended_request['requestId'] +
-          ", sessionId=" + session['sessionId'])
-    # add cleanup logic here
-
-# --------------- Main handler ------------------
-
-def lambda_handler(event, context):
-    """ Route the incoming request based on type (LaunchRequest, IntentRequest,
-    etc.) The JSON body of the request is provided in the event parameter.
-    """
-    print("event.session.application.applicationId=" +
-          event['session']['application']['applicationId'])
-
-    """
-    Uncomment this if statement and populate with your skill's application ID to
-    prevent someone else from configuring a skill that sends requests to this
-    function.
-    """
-    # if (event['session']['application']['applicationId'] !=
-    #         "amzn1.echo-sdk-ams.app.[unique-value-here]"):
-    #     raise ValueError("Invalid Application ID")
-
-    if event['session']['new']:
-        on_session_started({'requestId': event['request']['requestId']},
-                           event['session'])
-
-    if event['request']['type'] == "LaunchRequest":
-        return on_launch(event['request'], event['session'])
-    elif event['request']['type'] == "IntentRequest":
-        return on_intent(event['request'], event['session'])
-    elif event['request']['type'] == "SessionEndedRequest":
-        return on_session_ended(event['request'], event['session'])
-
 
