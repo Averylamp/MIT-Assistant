@@ -512,7 +512,7 @@ def lookup_person(personName):
     if "error" in response:
         return None
     if len(response) == 0:
-        return None
+        return []
     else:
         return response
 
@@ -606,12 +606,12 @@ def addSuggestions(speech = "", suggestions = []):
 
 
 test = {
-  "id": "11ebe497-1a21-4f79-b37b-aa14a50f97ea",
-  "timestamp": "2017-08-12T08:22:08.748Z",
+  "id": "5548ee3e-90dc-4be6-839e-4f65eb426c27",
+  "timestamp": "2017-08-12T08:26:34.118Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "look up san inish",
+    "resolvedQuery": "look up asm gism",
     "action": "LookUpPerson",
     "actionIncomplete": False,
     "parameters": {
@@ -665,7 +665,7 @@ test = {
         }
       ]
     },
-    "score": 0.4399999976158142
+    "score": 0.5600000023841858
   },
   "status": {
     "code": 206,
@@ -674,6 +674,6 @@ test = {
   },
   "sessionId": "c849e9e7-3c08-45c4-9df6-4a438214aeb9"
 }
-confirmPerson(test)
+lookupPerson(test)
 
 
