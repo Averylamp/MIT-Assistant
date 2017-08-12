@@ -510,7 +510,7 @@ def lookup_person(personName):
     r = requests.get("http://m.mit.edu/apis/people?q={}".format(personName))
     response = r.json()
     if "error" in response:
-        return None
+        return []
     if len(response) == 0:
         return []
     else:
@@ -674,6 +674,6 @@ test = {
   },
   "sessionId": "c849e9e7-3c08-45c4-9df6-4a438214aeb9"
 }
-lookupPerson(test)
+# lookupPerson(test)
 
 

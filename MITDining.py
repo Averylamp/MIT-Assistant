@@ -15,7 +15,9 @@ def handle_dining_intent(req):
 
     print(fullQuery)
 
-
+    print("----------- Final response -------------")
+    print(speech)
+    print(suggestions)
     data = addSuggestions(speech, suggestions)
 
     return {
@@ -44,7 +46,7 @@ print(dining_options())
 def lookup_dining_option(dining_halls, dining_meal = "", suggestions = []):
     print("Looking up dining halls {}".format(dining_halls))
     if len(dining_halls) < 1:
-        suggestions = dining_options()
+        suggestions += dining_options()
         return "Please specify which dining hall you would like to get meals for. Choose one of {}".format(getListString(dining_options(), None, "or"))
     else:
         print("Dining hall selected")
@@ -123,3 +125,103 @@ def getListString(listName, function = None, conjunction = "and"):
                 output += "{}, ".format(listName[i])
     return output
 
+test = {
+  "id": "b7a29d2b-d681-450a-b6a9-2d9a79e51e64",
+  "timestamp": "2017-08-12T08:31:55.684Z",
+  "lang": "en",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "what is in dining",
+    "action": "LookUpDining",
+    "actionIncomplete": False,
+    "parameters": {
+      "date": "",
+      "Dining_Hall": [],
+      "Dining_Times": ""
+    },
+    "contexts": [
+      {
+        "name": "current-person",
+        "parameters": {
+          "date": "",
+          "PersonInformationType.original": "",
+          "date.original": "",
+          "PersonInformationType": "",
+          "Initials": "",
+          "Dining_Times": "",
+          "Dining_Hall": [],
+          "Initials.original": "",
+          "given-name.original": "",
+          "last-name.original": "",
+          "Dining_Times.original": "",
+          "given-name": "",
+          "Dining_Hall.original": "",
+          "last-name": ""
+        },
+        "lifespan": 9
+      },
+      {
+        "name": "lookupperson-followup",
+        "parameters": {
+          "date": "",
+          "PersonInformationType.original": "",
+          "date.original": "",
+          "PersonInformationType": "",
+          "Initials": "",
+          "Dining_Times": "",
+          "Dining_Hall": [],
+          "Initials.original": "",
+          "given-name.original": "",
+          "last-name.original": "",
+          "Dining_Times.original": "",
+          "given-name": "",
+          "Dining_Hall.original": "",
+          "last-name": ""
+        },
+        "lifespan": 1
+      }
+    ],
+    "metadata": {
+      "intentId": "a6e65de2-523c-4ec6-b2f0-720ee53c253b",
+      "webhookUsed": "true",
+      "webhookForSlotFillingUsed": "false",
+      "webhookResponseTime": 301,
+      "intentName": "Look Up Dining"
+    },
+    "fulfillment": {
+      "speech": "Please specify which dining hall you would like to get meals for. Choose one of McCormick, Simmons, Baker, Maseeh, or Next.",
+      "source": "webhook",
+      "displayText": "Please specify which dining hall you would like to get meals for. Choose one of McCormick, Simmons, Baker, Maseeh, or Next.",
+      "messages": [
+        {
+          "type": 0,
+          "speech": "Please specify which dining hall you would like to get meals for. Choose one of McCormick, Simmons, Baker, Maseeh, or Next."
+        }
+      ],
+      "data": {
+        "google": {
+          "expect_user_response": True,
+          "rich_response": {
+            "items": [
+              {
+                "simpleResponse": {
+                  "textToSpeech": "Please specify which dining hall you would like to get meals for. Choose one of McCormick, Simmons, Baker, Maseeh, or Next.",
+                  "displayText": "Please specify which dining hall you would like to get meals for. Choose one of McCormick, Simmons, Baker, Maseeh, or Next."
+                }
+              }
+            ],
+            "suggestions": []
+          }
+        }
+      }
+    },
+    "score": 1
+  },
+  "status": {
+    "code": 200,
+    "errorType": "success"
+  },
+  "sessionId": "c849e9e7-3c08-45c4-9df6-4a438214aeb9"
+}
+
+handle_dining_intent(test)
