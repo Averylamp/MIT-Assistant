@@ -1,7 +1,7 @@
 import requests
 import datetime
 
-def handle_dining_intent():
+def handle_dining_intent(req):
     speech =  "Lookup  Person"
     contexts = req.get("result").get("contexts")
     suggestions = []
@@ -11,7 +11,7 @@ def handle_dining_intent():
 
     print(fullQuery)
 
-    
+
     data = addSuggestions(speech, suggestions)
 
     return {
