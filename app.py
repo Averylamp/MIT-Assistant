@@ -75,25 +75,25 @@ def processRequest(req):
 	}
 
 def endIntent():
-	data =  {"google":{
-	  "expect_user_response":False,
-	  "rich_response":{
-		 "items":[
-			{
-			   "simpleResponse":{
-				  "textToSpeech":"Thank you for using MIT Information.  Keep us in mind when you need more of your on campus information.",
-				  "displayText":"Thank you for using MIT Information.  Keep us in mind when you need more of your on campus information."
-			   }
-			}
-		 ],
-		 "suggestions": []
-		  }
-	   }
-	}
+	# data =  {"google":{
+	#   "expect_user_response":False,
+	#   "rich_response":{
+	# 	 "items":[
+	# 		{
+	# 		   "simpleResponse":{
+	# 			  "textToSpeech":"Thank you for using MIT Information.  Keep us in mind when you need more of your on campus information.",
+	# 			  "displayText":"Thank you for using MIT Information.  Keep us in mind when you need more of your on campus information."
+	# 		   }
+	# 		}
+	# 	 ],
+	# 	 "suggestions": []
+	# 	  }
+	#    }
+	# }
 	return {
 		"speech": "Thank you for using MIT Information.  Keep us in mind when you need more of your on campus information.",
 		"displayText": "Thank you for using MIT Information.  Keep us in mind when you need more of your on campus information.",
-		"data": data,
+		"data": [],
 		"contextOut": {},
 		"source": "webhook"
 	}
