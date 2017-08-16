@@ -132,20 +132,20 @@ def lookupClass(req):
                     updateContext(contexts, "endcontext", 1, {})
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
-            suggestions = ["name", "instructors", "longer description", "number of units"]
+            suggestions = ["name", "instructors", "longer description", "location", "number of units"]
         else:
             r = getClassInfo(classNumber)
             if validateResponse(r.json()):
-                speech = "{} could not be found as a class.  You can find the name, instructors, longer description, or number of units for a different class.  Just ask away!".format(classNumber)
+                speech = "{} could not be found as a class.  You can find the name, instructors, longer description, location, or number of units for a different class.  Just ask away!".format(classNumber)
                 suggestions = ["Look up a class", "Look up a person"]
             else:
-                speech = "You can find the name, instructors, longer description, or number of units for the class {}.  Just ask for what you want!".format(classNumber)
-                suggestions = ["name", "instructors", "longer description", "number of units"]
+                speech = "You can find the name, instructors, longer description, location, or number of units for the class {}.  Just ask for what you want!".format(classNumber)
+                suggestions = ["name", "instructors", "longer description", "location", "number of units"]
     else:
         if classInfoFound:
             speech = "To get the {} of a class, just let us know the class.".format(classInfoType.lowercase())
         else:
-            speech = "You can find the name, instructors, longer description, or number of units of a class.  Just ask away!"
+            speech = "You can find the name, instructors, longer description, location, or number of units of a class.  Just ask away!"
     print("------ Final Speech -------")
     print(speech)
     data = addSuggestions(speech, suggestions)
