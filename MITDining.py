@@ -11,7 +11,7 @@ def handle_dining_intent(req):
     diningHalls = parameters.get("Dining_Hall", [])
     diningTimes = parameters.get("Dining_Times", "")
     print(lookup_dining_option(diningHalls, diningTimes))
-    speech = lookup_dining_option(diningHalls, diningTimes, suggestions)
+    speech = lookup_dining_option(diningHalls, diningTimes, suggestions, contexts)
 
     print(fullQuery)
 
@@ -43,7 +43,7 @@ def dining_options():
     return options
 
 # print(dining_options())
-def lookup_dining_option(dining_halls, dining_meal = "", suggestions = []):
+def lookup_dining_option(dining_halls, dining_meal = "", suggestions = [], contexts={}):
     print("Looking up dining halls {}".format(dining_halls))
     if len(dining_halls) < 1:
         suggestions += dining_options()
@@ -82,8 +82,10 @@ def lookup_dining_option(dining_halls, dining_meal = "", suggestions = []):
                         output += "  No meal found in {} for today. ".format(hall_name)
             if hallFound == False:
                 output += hall_name[:1].capitalize() + hall_name[1:] + " could not be found as a MIT dining hall.  Try again with a vailid MIT Dining hall name.  "
+                updateContext(contexts, "endcontext", 1, {})
             else:
-            	output += "  To get more dining information just search for another dining hall."
+            	output += "  Did you want to look up dining for another dining hall?"
+            	updateContext(contexts, "endcontext", 1, {})
         suggestions += dining_options()
         return output
 
@@ -108,6 +110,16 @@ def addSuggestions(speech = "", suggestions = [], expectResponse = True):
       }
    }
 }
+def updateContext(contexts, name, lifespan, parameters):
+    updated = False
+    for i in range(len(contexts)):
+        if contexts[i].get("name", "").lower() == name.lower():
+            contexts[i]["lifespan"] = lifespan
+            contexts[i]["parameters"] = parameters
+            updated = True
+    if updated == False:
+        contexts.append({"name":name.lower(),"lifespan":lifespan, "parameters":parameters})
+
 def getListString(listName, function = None, conjunction = "and"):
     output = ""
     if len(listName) == 0:

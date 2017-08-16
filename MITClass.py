@@ -101,30 +101,35 @@ def lookupClass(req):
                 q = getInstructor(classNumber)
                 if q != "Not Found":
                     speech = "{} is taught by {}.  Do you want any more information?".format(getSubjTitle(classNumber), q)
+                    updateContext(contexts, "endcontext", 1, {})
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Title":
                 q = getSubjTitle(classNumber)
                 if q != "Not Found":
                     speech = "{} is {}.  Do you want any more information?".format(classNumber, q)
+                    updateContext(contexts, "endcontext", 1, {})
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Description":
                 q = getDescp(classNumber)
                 if q != "Not Found":
                     speech = "Here's the long description of {}.  {}.  Do you want any more information?".format(getSubjTitle(classNumber), q)
+                    updateContext(contexts, "endcontext", 1, {})
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Units":
                 q = getUnits(classNumber)
                 if q != "Not Found":
                     speech = "{} is {} units.  Do you want any more information?".format(getSubjTitle(classNumber), q)
+                    updateContext(contexts, "endcontext", 1, {})
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Room":
                 q = getRoomNumber(classNumber)
                 if q != "Not Found":
                     speech = "{} is located in {}.  Do you want any more information?".format(getSubjTitle(classNumber), q)
+                    updateContext(contexts, "endcontext", 1, {})
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             suggestions = ["name", "instructors", "longer description", "number of units"]
@@ -134,7 +139,7 @@ def lookupClass(req):
                 speech = "{} could not be found as a class.  You can find the name, instructors, longer description, or number of units for a different class.  Just ask away!".format(classNumber)
                 suggestions = ["Look up a class", "Look up a person"]
             else:
-                speech = "You can find the name, instructors, longer description, or number of units for the class {}.  Just ask away!".format(classNumber)
+                speech = "You can find the name, instructors, longer description, or number of units for the class {}.  Just ask for what you want!".format(classNumber)
                 suggestions = ["name", "instructors", "longer description", "number of units"]
     else:
         if classInfoFound:
@@ -254,6 +259,16 @@ def getRoomNumber(class_name):
         loc_time.append(lec)
 
     return str(lectures[0]['location'])
+def updateContext(contexts, name, lifespan, parameters):
+    updated = False
+    for i in range(len(contexts)):
+        if contexts[i].get("name", "").lower() == name.lower():
+            contexts[i]["lifespan"] = lifespan
+            contexts[i]["parameters"] = parameters
+            updated = True
+    if updated == False:
+        contexts.append({"name":name.lower(),"lifespan":lifespan, "parameters":parameters})
+
 test = {
   "id": "6206af22-566c-4c50-9119-b9f218ffdc8a",
   "timestamp": "2017-08-04T01:12:15.965Z",
