@@ -60,19 +60,45 @@ def processRequest(req):
 	if req.get("result").get("action") == "LookUpPerson.LookUpConfirmation":
 		print("People Confirmation Detected")
 		return MITPeople.confirmPerson(req)
+	if req.get("result").get("action") == "EndIntent":
+		return endIntent()
 	if req.get("result").get("action") == "LookUpDining":
 		print("Dining Lookup Detected")
 		return MITDining.handle_dining_intent(req)
 	
 	return {
-        "speech": "Unable to proccess the request.  Try again later please.",
-        "displayText": "Unable to proccess the request.  Try again later please.",
-        # "data": data,
-        "contextOut": [],
-        "source": "webhook"
-    }
-
-
+		"speech": "Unable to proccess the request.  Try again later please.",
+		"displayText": "Unable to proccess the request.  Try again later please.",
+		# "data": data,
+		"contextOut": [],
+		"source": "webhook"
+	}
+	
+def endIntent():
+	data =  {"google":{
+	  "expect_user_response":False,
+	  "rich_response":{
+		 "items":[
+			{
+			   "simpleResponse":{
+				  "textToSpeech":"Thank you for using MIT Information.  Keep us in mind when you need more of your on campus information.",
+				  "displayText":"Thank you for using MIT Information.  Keep us in mind when you need more of your on campus information."
+			   }
+			}
+		 ],
+		 "suggestions": []
+		  }
+	   }
+	}
+	return {
+		"speech": "Thank you for using MIT Information.  Keep us in mind when you need more of your on campus information.",
+		"displayText": "Thank you for using MIT Information.  Keep us in mind when you need more of your on campus information.",
+		"data": data,
+		"contextOut": {},
+		"source": "webhook"
+	}
+		
+print(endIntent())
 
 if __name__ == '__main__':
 	port = int(os.getenv('PORT', 5000))
