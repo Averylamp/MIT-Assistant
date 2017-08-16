@@ -98,49 +98,11 @@ def endIntent():
 		"source": "webhook"
 	}
 		
-print(endIntent())
-
-test = {
-  "id": "41171092-c7b5-4e59-aea1-2580e2d9ba59",
-  "timestamp": "2017-08-16T06:59:35.654Z",
-  "lang": "en",
-  "result": {
-    "source": "agent",
-    "resolvedQuery": "no",
-    "action": "EndIntent",
-    "actionIncomplete": false,
-    "parameters": {},
-    "contexts": [],
-    "metadata": {
-      "intentId": "69436dda-aa54-4f2c-8cc0-58a6a827348f",
-      "webhookUsed": "true",
-      "webhookForSlotFillingUsed": "false",
-      "webhookResponseTime": 165,
-      "intentName": "End Intent"
-    },
-    "fulfillment": {
-      "speech": "",
-      "messages": [
-        {
-          "type": 0,
-          "speech": ""
-        }
-      ]
-    },
-    "score": 1
-  },
-  "status": {
-    "code": 206,
-    "errorType": "partial_content",
-    "errorDetails": "Webhook call failed. Error: Webhook response was empty."
-  },
-  "sessionId": "c849e9e7-3c08-45c4-9df6-4a438214aeb9"
-}
 
 
-# if __name__ == '__main__':
-# 	port = int(os.getenv('PORT', 5000))
+if __name__ == '__main__':
+	port = int(os.getenv('PORT', 5000))
 
-# 	print("Starting app on port %d" % port)
+	print("Starting app on port %d" % port)
 
-# 	app.run(debug=False, port=port, host='0.0.0.0')
+	app.run(debug=False, port=port, host='0.0.0.0')

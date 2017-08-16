@@ -42,7 +42,7 @@ def dining_options():
             options.append(diningOption.get("short_name", ""))
     return options
 
-print(dining_options())
+# print(dining_options())
 def lookup_dining_option(dining_halls, dining_meal = "", suggestions = []):
     print("Looking up dining halls {}".format(dining_halls))
     if len(dining_halls) < 1:
@@ -226,4 +226,4 @@ test = {
   "sessionId": "c849e9e7-3c08-45c4-9df6-4a438214aeb9"
 }
 
-handle_dining_intent(test)
+# handle_dining_intent(test)
