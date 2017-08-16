@@ -64,7 +64,9 @@ def processRequest(req):
 		return endIntent()
 	if req.get("result").get("action") == "LookUpDining":
 		print("Dining Lookup Detected")
-		return MITDining.handle_dining_intent(req)
+		r = MITDining.handle_dining_intent(req)
+		print(r)
+		return r
 	
 	return {
 		"speech": "Unable to proccess the request.  Try again later please.",
