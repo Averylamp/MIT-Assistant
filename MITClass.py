@@ -56,7 +56,7 @@ def lookupClass(req):
     contexts = req.get("result").get("contexts")
     fullQuery = req.get("result").get("resolvedQuery")
     suggestions = []
-    if fullQuery == "Look up a class":
+    if fullQuery.lower() == "Look up a class".lower()  or fullQuery.lower() == "Look up class".lower():
         speech = "To look up a class, simply say 'Look up class' then the class number."
         return {
         "speech": speech,
@@ -100,31 +100,31 @@ def lookupClass(req):
             if classInfoType == "Instructor":
                 q = getInstructor(classNumber)
                 if q != "Not Found":
-                    speech = "{} is taught by {}.".format(getSubjTitle(classNumber), q)
+                    speech = "{} is taught by {}.  Do you want any more information?".format(getSubjTitle(classNumber), q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Title":
                 q = getSubjTitle(classNumber)
                 if q != "Not Found":
-                    speech = "{} is {}.".format(classNumber, q)
+                    speech = "{} is {}.  Do you want any more information?".format(classNumber, q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Description":
                 q = getDescp(classNumber)
                 if q != "Not Found":
-                    speech = "Here's the long description of {}.  {}.".format(getSubjTitle(classNumber), q)
+                    speech = "Here's the long description of {}.  {}.  Do you want any more information?".format(getSubjTitle(classNumber), q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Units":
                 q = getUnits(classNumber)
                 if q != "Not Found":
-                    speech = "{} is {} units.".format(getSubjTitle(classNumber), q)
+                    speech = "{} is {} units.  Do you want any more information?".format(getSubjTitle(classNumber), q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             elif classInfoType == "Room":
                 q = getRoomNumber(classNumber)
                 if q != "Not Found":
-                    speech = "{} is located in {}.".format(getSubjTitle(classNumber), q)
+                    speech = "{} is located in {}.  Do you want any more information?".format(getSubjTitle(classNumber), q)
                 else:
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             suggestions = ["name", "instructors", "longer description", "number of units"]

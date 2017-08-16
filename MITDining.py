@@ -47,7 +47,7 @@ def lookup_dining_option(dining_halls, dining_meal = "", suggestions = []):
     print("Looking up dining halls {}".format(dining_halls))
     if len(dining_halls) < 1:
         suggestions += dining_options()
-        return "Please specify which dining hall you would like to get meals for. Choose one of {}".format(getListString(dining_options(), None, "or"))
+        return "Please specify which dining hall or halls you would like to get meals for. Choose from {}".format(getListString(dining_options(), None, "and or"))
     else:
         print("Dining hall selected")
         fullOptions = lookup_dining()
@@ -81,18 +81,20 @@ def lookup_dining_option(dining_halls, dining_meal = "", suggestions = []):
                     else:
                         output += "  No meal found in {} for today. ".format(hall_name)
             if hallFound == False:
-                output += hall_name[:1].capitalize() + hall_name[1:] + " could not be found as a MIT dining hall"
-
+                output += hall_name[:1].capitalize() + hall_name[1:] + " could not be found as a MIT dining hall.  Try again with a vailid MIT Dining hall name.  "
+            else:
+            	output += "  To get more dining information just search for another dining hall."
+        suggestions += dining_options()
         return output
 
 # print(lookup_dining_option(["Maseeh"]))
-def addSuggestions(speech = "", suggestions = []):
+def addSuggestions(speech = "", suggestions = [], expectResponse = True):
     suggestionsTitles = []
     for item in suggestions:
         suggestionsTitles.append({"title":item})
     return {
    "google":{
-      "expect_user_response":True,
+      "expect_user_response":expectResponse,
       "rich_response":{
          "items":[
             {

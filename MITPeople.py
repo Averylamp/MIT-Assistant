@@ -9,7 +9,7 @@ def lookupPerson(req):
     suggestions = []
     parameters = req.get("result").get("parameters")
     fullQuery = req.get("result").get("resolvedQuery")
-    if fullQuery == "Look up a person":
+    if fullQuery.lower() == "Look up a person".lower() or fullQuery.lower() == "Look up person".lower():
         speech = "To look up a person, simply say 'Look up' then the person's name."
         return {
         "speech": speech,
@@ -143,7 +143,7 @@ def lookupPerson(req):
             else:
                 speech += "They are: " + getListString(foundNamesArr) + ". " 
                 suggestions = suggestions + list(map(lambda x: "Confirm " + x, foundNamesArr))
-            speech += "To confirm the person you are looking for say confirm, then their full name again"
+            speech += "To confirm the person you are looking for say confirm, then their full name again."
             updateContext(contexts, "ConfirmPersonContext".lower() , 2, {"ConfirmPerson":True})
     elif len(foundNamesArr) == 1:
         speech = "{} found. ".format(foundNamesArr[0])
@@ -315,8 +315,9 @@ def lookupInformation(req):
                     resultingOption = contractions[resultingOption]
                 addedItems.append("{} is {}".format(infoOption, resultingOption))
         speech += getListString(addedItems)
+        speech += "  To get more information for {}, ask.  Or maybe try looking someone else.".format(foundPersonName)
     else:
-        speech = "Sorry, I am unable to determine information to retrieve."
+        speech = "Sorry, I am unable to determine information to retrieve.  Try again with one of {}".format(getListString(foundOptions, "or"))
     print("----------- Final response -------------")
     print(speech)
     data = addSuggestions(speech, suggestions)
@@ -583,13 +584,13 @@ def damerau_levenshtein_distance(s1, s2):
   
 # --------------- Events ------------------
 
-def addSuggestions(speech = "", suggestions = []):
+def addSuggestions(speech = "", suggestions = [], userResponse = True):
     suggestionsTitles = []
     for item in suggestions:
         suggestionsTitles.append({"title":item})
     return {
    "google":{
-      "expect_user_response":True,
+      "expect_user_response":userResponse,
       "rich_response":{
          "items":[
             {
