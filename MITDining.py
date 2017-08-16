@@ -18,7 +18,7 @@ def handle_dining_intent(req):
     print("----------- Final response -------------")
     print(speech)
     print(suggestions)
-    data = addSuggestions(speech, suggestions)
+    data = addSuggestions(speech, suggestions, contexts)
 
     return {
         "speech": speech,
@@ -141,8 +141,8 @@ def getListString(listName, function = None, conjunction = "and"):
     return output
 
 test = {
-  "id": "ea2b6b6a-b96d-4ce7-94f5-dced20628cc9",
-  "timestamp": "2017-08-16T15:39:34.56Z",
+  "id": "77cb4191-9b14-4c09-8989-37599afabfbc",
+  "timestamp": "2017-08-16T15:42:48.524Z",
   "lang": "en",
   "result": {
     "source": "agent",
