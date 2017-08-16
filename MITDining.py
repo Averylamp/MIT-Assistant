@@ -43,7 +43,7 @@ def dining_options():
     return options
 
 # print(dining_options())
-def lookup_dining_option(dining_halls, dining_meal = "", suggestions = [], contexts={}):
+def lookup_dining_option(dining_halls, dining_meal = "", suggestions = [], contexts=[]):
     print("Looking up dining halls {}".format(dining_halls))
     if len(dining_halls) < 1:
         suggestions += dining_options()
@@ -82,10 +82,10 @@ def lookup_dining_option(dining_halls, dining_meal = "", suggestions = [], conte
                         output += "  No meal found in {} for today. ".format(hall_name)
             if hallFound == False:
                 output += hall_name[:1].capitalize() + hall_name[1:] + " could not be found as a MIT dining hall.  Try again with a vailid MIT Dining hall name.  "
-                updateContext(contexts, "endcontext", 1, {})
+                updateContext(contexts, "endcontext", 1, contexts)
             else:
             	output += "  Did you want to look up dining for another dining hall?"
-            	updateContext(contexts, "endcontext", 1, {})
+            	updateContext(contexts, "endcontext", 1, contexts)
             	suggestions += ["I'm Done"]
         suggestions += dining_options()
         return output
@@ -141,102 +141,40 @@ def getListString(listName, function = None, conjunction = "and"):
     return output
 
 test = {
-  "id": "b7a29d2b-d681-450a-b6a9-2d9a79e51e64",
-  "timestamp": "2017-08-12T08:31:55.684Z",
+  "id": "ea2b6b6a-b96d-4ce7-94f5-dced20628cc9",
+  "timestamp": "2017-08-16T15:39:34.56Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "what is in dining",
+    "resolvedQuery": "what's in maseeh",
     "action": "LookUpDining",
     "actionIncomplete": False,
     "parameters": {
       "date": "",
-      "Dining_Hall": [],
+      "Dining_Hall": [
+        "Maseeh"
+      ],
       "Dining_Times": ""
     },
-    "contexts": [
-      {
-        "name": "current-person",
-        "parameters": {
-          "date": "",
-          "PersonInformationType.original": "",
-          "date.original": "",
-          "PersonInformationType": "",
-          "Initials": "",
-          "Dining_Times": "",
-          "Dining_Hall": [],
-          "Initials.original": "",
-          "given-name.original": "",
-          "last-name.original": "",
-          "Dining_Times.original": "",
-          "given-name": "",
-          "Dining_Hall.original": "",
-          "last-name": ""
-        },
-        "lifespan": 9
-      },
-      {
-        "name": "lookupperson-followup",
-        "parameters": {
-          "date": "",
-          "PersonInformationType.original": "",
-          "date.original": "",
-          "PersonInformationType": "",
-          "Initials": "",
-          "Dining_Times": "",
-          "Dining_Hall": [],
-          "Initials.original": "",
-          "given-name.original": "",
-          "last-name.original": "",
-          "Dining_Times.original": "",
-          "given-name": "",
-          "Dining_Hall.original": "",
-          "last-name": ""
-        },
-        "lifespan": 1
-      }
-    ],
+    "contexts": [],
     "metadata": {
       "intentId": "a6e65de2-523c-4ec6-b2f0-720ee53c253b",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "webhookResponseTime": 301,
       "intentName": "Look Up Dining"
     },
     "fulfillment": {
-      "speech": "Please specify which dining hall you would like to get meals for. Choose one of McCormick, Simmons, Baker, Maseeh, or Next.",
-      "source": "webhook",
-      "displayText": "Please specify which dining hall you would like to get meals for. Choose one of McCormick, Simmons, Baker, Maseeh, or Next.",
-      "messages": [
-        {
-          "type": 0,
-          "speech": "Please specify which dining hall you would like to get meals for. Choose one of McCormick, Simmons, Baker, Maseeh, or Next."
-        }
-      ],
-      "data": {
-        "google": {
-          "expect_user_response": True,
-          "rich_response": {
-            "items": [
-              {
-                "simpleResponse": {
-                  "textToSpeech": "Please specify which dining hall you would like to get meals for. Choose one of McCormick, Simmons, Baker, Maseeh, or Next.",
-                  "displayText": "Please specify which dining hall you would like to get meals for. Choose one of McCormick, Simmons, Baker, Maseeh, or Next."
-                }
-              }
-            ],
-            "suggestions": []
-          }
-        }
-      }
+      "speech": "",
+      "messages": []
     },
-    "score": 1
+    "score": 0.7799999713897705
   },
   "status": {
-    "code": 200,
-    "errorType": "success"
+    "code": 206,
+    "errorType": "partial_content",
+    "errorDetails": "Webhook call failed. Error: 500 INTERNAL SERVER ERROR"
   },
   "sessionId": "c849e9e7-3c08-45c4-9df6-4a438214aeb9"
 }
 
-# handle_dining_intent(test)
+handle_dining_intent(test)
