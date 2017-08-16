@@ -82,10 +82,10 @@ def lookup_dining_option(dining_halls, dining_meal = "", suggestions = [], conte
                         output += "  No meal found in {} for today. ".format(hall_name)
             if hallFound == False:
                 output += hall_name[:1].capitalize() + hall_name[1:] + " could not be found as a MIT dining hall.  Try again with a vailid MIT Dining hall name.  "
-                updateContext(contexts, "endcontext", 1, contexts)
+                updateContext(contexts, "endcontext", 1, {})
             else:
             	output += "  Did you want to look up dining for another dining hall?"
-            	updateContext(contexts, "endcontext", 1, contexts)
+            	updateContext(contexts, "endcontext", 1, {})
             	suggestions += ["I'm Done"]
         suggestions += dining_options()
         return output
