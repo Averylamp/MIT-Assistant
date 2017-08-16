@@ -317,6 +317,7 @@ def lookupInformation(req):
         speech += getListString(addedItems)
         speech += "  Did you want more information for {}?".format(foundPersonName)
         updateContext(contexts, "endcontext", 1, {})
+        suggestions += ["I'm Done"]
     else:
         speech = "Sorry, I am unable to determine information to retrieve.  Try again with one of {}".format(getListString(foundOptions, "or"))
     print("----------- Final response -------------")

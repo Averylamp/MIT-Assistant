@@ -86,6 +86,7 @@ def lookup_dining_option(dining_halls, dining_meal = "", suggestions = [], conte
             else:
             	output += "  Did you want to look up dining for another dining hall?"
             	updateContext(contexts, "endcontext", 1, {})
+            	suggestions += ["I'm Done"]
         suggestions += dining_options()
         return output
 
