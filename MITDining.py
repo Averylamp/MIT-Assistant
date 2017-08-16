@@ -18,7 +18,7 @@ def handle_dining_intent(req):
     print("----------- Final response -------------")
     print(speech)
     print(suggestions)
-    data = addSuggestions(speech, suggestions, contexts)
+    data = addSuggestions(speech, suggestions)
 
     return {
         "speech": speech,
