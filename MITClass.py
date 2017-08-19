@@ -101,7 +101,7 @@ def lookupClass(req):
             if classInfoType == "Instructor":
                 q = getInstructor(classNumber)
                 if q != "Not Found":
-                    speech = "{} is taught by {}.  Do you want any more information?".format(getSubjTitle(classNumber), q)
+                    speech = "{} is taught by {}.  Do you want any more information?  If so, say the information type that you want.".format(getSubjTitle(classNumber), q)
                     updateContext(contexts, "endcontext", 1, {})
                     suggestions += ["I'm Done"]
                 else:
@@ -109,7 +109,7 @@ def lookupClass(req):
             elif classInfoType == "Title":
                 q = getSubjTitle(classNumber)
                 if q != "Not Found":
-                    speech = "{} is {}.  Do you want any more information?".format(classNumber, q)
+                    speech = "{} is {}.  Do you want any more information?  If so, say the information type that you want.".format(classNumber, q)
                     suggestions += ["I'm Done"]
                     updateContext(contexts, "endcontext", 1, {})
                 else:
@@ -117,7 +117,7 @@ def lookupClass(req):
             elif classInfoType == "Description":
                 q = getDescp(classNumber)
                 if q != "Not Found":
-                    speech = "Here's the long description of {}.  {}.  Do you want any more information?".format(getSubjTitle(classNumber), q)
+                    speech = "Here's the long description of {}.  {}.  Do you want any more information?  If so, say the information type that you want.".format(getSubjTitle(classNumber), q)
                     suggestions += ["I'm Done"]
                     updateContext(contexts, "endcontext", 1, {})
                 else:
@@ -125,7 +125,7 @@ def lookupClass(req):
             elif classInfoType == "Units":
                 q = getUnits(classNumber)
                 if q != "Not Found":
-                    speech = "{} is {} units.  Do you want any more information?".format(getSubjTitle(classNumber), q)
+                    speech = "{} is {} units.  Do you want any more information?  If so, say the information type that you want.".format(getSubjTitle(classNumber), q)
                     suggestions += ["I'm Done"]
                     updateContext(contexts, "endcontext", 1, {})
                 else:
@@ -133,7 +133,7 @@ def lookupClass(req):
             elif classInfoType == "Room":
                 q = getRoomNumber(classNumber)
                 if q != "Not Found":
-                    speech = "{} is located in {}.  Do you want any more information?".format(getSubjTitle(classNumber), q)
+                    speech = "{} is located in {}.  Do you want any more information?  If so, say the information type that you want.".format(getSubjTitle(classNumber), q)
                     suggestions += ["I'm Done"]
                     updateContext(contexts, "endcontext", 1, {})
                 else:

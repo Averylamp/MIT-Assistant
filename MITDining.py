@@ -84,7 +84,7 @@ def lookup_dining_option(dining_halls, dining_meal = "", suggestions = [], conte
                 output += hall_name[:1].capitalize() + hall_name[1:] + " could not be found as a MIT dining hall.  Try again with a vailid MIT Dining hall name.  "
                 updateContext(contexts, "endcontext", 1, {})
             else:
-            	output += "  Did you want to look up dining for another dining hall?"
+            	output += "  Did you want to look up dining for another dining hall?  If so, say the dining hall name that you want to look up."
             	updateContext(contexts, "endcontext", 1, {})
             	suggestions += ["I'm Done"]
         suggestions += dining_options()

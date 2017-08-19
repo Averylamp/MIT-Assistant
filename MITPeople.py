@@ -315,7 +315,7 @@ def lookupInformation(req):
                     resultingOption = contractions[resultingOption]
                 addedItems.append("{} is {}".format(infoOption, resultingOption))
         speech += getListString(addedItems)
-        speech += "  Did you want more information for {}?".format(foundPersonName)
+        speech += "  Did you want more information for {}?  If so, say the information that you want".format(foundPersonName)
         updateContext(contexts, "endcontext", 1, {})
         suggestions += ["I'm Done"]
     else:
