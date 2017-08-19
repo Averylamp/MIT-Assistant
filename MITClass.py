@@ -92,10 +92,10 @@ def lookupClass(req):
     if parameters.get("ClassInfoTypes", "") != "":
         classInfoType = parameters.get("ClassInfoTypes")
         classInfoFound = True
-    
     if classNumberFound:
         print("Class number found {}".format(classNumber))
         if classInfoFound:
+            print("HEreb")
             print("Class Info Found {}".format(classInfoType))
             suggestions = ["name", "instructors", "longer description", "location", "number of units"]
             if classInfoType == "Instructor":
@@ -140,6 +140,8 @@ def lookupClass(req):
                     speech = "{} could not be found.  Try searching for another class.".format(classNumber)
             
         else:
+
+            print("Class info type not found")
             r = getClassInfo(classNumber)
             if validateResponse(r.json()):
                 speech = "{} could not be found as a class.  You can find the name, instructors, longer description, location, or number of units for a different class.  Just ask away!".format(classNumber)
@@ -276,57 +278,93 @@ def updateContext(contexts, name, lifespan, parameters):
         contexts.append({"name":name.lower(),"lifespan":lifespan, "parameters":parameters})
 
 test = {
-  "id": "6206af22-566c-4c50-9119-b9f218ffdc8a",
-  "timestamp": "2017-08-04T01:12:15.965Z",
+  "id": "60d7b877-63cf-4df8-8597-c020100a9987",
+  "timestamp": "2017-08-19T21:06:55.873Z",
   "lang": "en",
   "result": {
     "source": "agent",
-    "resolvedQuery": "look up class 183",
-    "action": "LookUpClass",
+    "resolvedQuery": "look up new enterprises class",
+    "action": "LookUpClass.LookUpClassInformation",
     "actionIncomplete": False,
     "parameters": {
-      "ClassInfoTypes": "",
-      "number": "183"
+      "ClassInfoTypes": "look up new enterprises",
+      "newnumber": ""
     },
     "contexts": [
       {
         "name": "lookupclass-followup",
         "parameters": {
-          "number": "183",
-          "number.original": "183",
-          "ClassInfoTypes": "",
-          "ClassInfoTypes.original": ""
+          "number": "7.012",
+          "newnumber": "",
+          "newnumber.original": "",
+          "number.original": "7.012",
+          "ClassInfoTypes": "look up new enterprises",
+          "ClassInfoTypes.original": "look up new enterprises"
         },
-        "lifespan": 2
+        "lifespan": 4
       },
       {
         "name": "class-number-found",
         "parameters": {
-          "number": "183",
-          "number.original": "183",
-          "ClassInfoTypes": "",
-          "ClassInfoTypes.original": ""
+          "number": "7.012",
+          "newnumber": "",
+          "newnumber.original": "",
+          "number.original": "7.012",
+          "ClassInfoTypes": "look up new enterprises",
+          "ClassInfoTypes.original": "look up new enterprises"
         },
-        "lifespan": 5
+        "lifespan": 4
       }
     ],
     "metadata": {
-      "intentId": "6348c5a5-3b25-492b-b9fe-a898d4b12fa0",
+      "intentId": "a88244a7-5560-42d3-9ead-d1623c367dd7",
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
-      "webhookResponseTime": 720,
-      "intentName": "Look Up Class"
+      "webhookResponseTime": 35,
+      "intentName": "Look Up Class - Information"
     },
     "fulfillment": {
-      "speech": "You can find the name, instructors, longer description, or number of units for the class 183.  Just ask away!",
+      "speech": "Lookup  class",
       "source": "webhook",
-      "displayText": "You can find the name, instructors, longer description, or number of units for the class 183.  Just ask away!",
+      "displayText": "Lookup  class",
       "messages": [
         {
           "type": 0,
-          "speech": "You can find the name, instructors, longer description, or number of units for the class 183.  Just ask away!"
+          "speech": "Lookup  class"
         }
-      ]
+      ],
+      "data": {
+        "google": {
+          "expect_user_response": True,
+          "rich_response": {
+            "items": [
+              {
+                "simpleResponse": {
+                  "textToSpeech": "Lookup  class",
+                  "displayText": "Lookup  class"
+                }
+              }
+            ],
+            "suggestions": [
+              {
+                "title": "name"
+              },
+              {
+                "title": "instructors"
+              },
+              {
+                "title": "longer description"
+              },
+              {
+                "title": "location"
+              },
+              {
+                "title": "number of units"
+              }
+            ]
+          }
+        }
+      }
     },
     "score": 1
   },
@@ -334,6 +372,6 @@ test = {
     "code": 200,
     "errorType": "success"
   },
-  "sessionId": "6693c855-d7b1-4595-bb0b-d63c5d1af277"
+  "sessionId": "97dcb6e7-e962-4850-9da2-196199bea549"
 }
-# lookupClass(test)
+lookupClass(test)
