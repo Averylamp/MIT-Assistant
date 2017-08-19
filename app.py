@@ -62,6 +62,8 @@ def processRequest(req):
 		return MITPeople.confirmPerson(req)
 	if req.get("result").get("action") == "EndIntent":
 		return endIntent()
+	if req.get("result").get("action") == "input.welcome":
+		return welcomeIntent()
 	if req.get("result").get("action") == "LookUpDining":
 		print("Dining Lookup Detected")
 		r = MITDining.handle_dining_intent(req)
@@ -75,7 +77,33 @@ def processRequest(req):
 		"contextOut": [],
 		"source": "webhook"
 	}
-
+def welcomeIntent():
+	suggestions = ["What can you do?", "Look up a class","Look up a person", "What's in Maseeh today?"]
+	suggestionsTitles = []
+	for item in suggestions:
+		suggestionsTitles.append({"title":item})
+	data =  {"google":{
+	  "expect_user_response":False,
+	  "rich_response":{
+		 "items":[
+			{
+			   "simpleResponse":{
+				  "textToSpeech":"Hi! Welcome to the MIT Assistant.  We can help you look up people in the Directory, figure out what class numbers correspond to, and help you figure out what is in dining currently.  Ask away!",
+				  "displayText":"Hi! Welcome to the MIT Assistant.  We can help you look up people in the Directory, figure out what class numbers correspond to, and help you figure out what is in dining currently.  Ask away!"
+			   }
+			}
+		 ],
+		 "suggestions": suggestionsTitles
+		  }
+	   }
+	}
+	return {
+		"speech": "Hi! Welcome to the MIT Assistant.  We can help you look up people in the Directory, figure out what class numbers correspond to, and help you figure out what is in dining currently.  Ask away!",
+		"displayText": "Hi! Welcome to the MIT Assistant.  We can help you look up people in the Directory, figure out what class numbers correspond to, and help you figure out what is in dining currently.  Ask away!",
+		"data": data,
+		"contextOut": {},
+		"source": "webhook"
+	}
 def endIntent():
 	data =  {"google":{
 	  "expect_user_response":False,
